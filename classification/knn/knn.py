@@ -3,6 +3,21 @@ import operator
 
 
 def classify_point(new_point, dataset, k):
+    """
+    labels an unlabelled instance of a dataset using the k nearest neighbours algorithm
+    :type new_point: numpy.ndarray
+    :param new_point: unlabelled instance we want to label
+                      features must be numeric values in order to calculate the distance
+
+    :type dataset: pandas.DataFrame
+    :param dataset: pandas 2D dataframe containing labelled instances.
+                    features must be numeric values in order to calculate the distance
+
+    :type k: int
+    :param k: number of nearest neighbours we examine
+
+    :return: the label corresponding to new_point
+    """
     # extract the data from the pandas dataframe
     points = dataset.iloc[:, :-1].values
     labels = dataset.iloc[:, len(dataset.columns) - 1].values

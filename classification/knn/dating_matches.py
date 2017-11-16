@@ -1,9 +1,13 @@
 import pandas as pd
 import numpy as np
 
-# import dataset
+
 def load_dataset():
-    dataset = pd.read_csv('datingTestSet.txt', delimiter = '\t', header = None)
+    """
+    loads the dating site data from the file onto a pandas.DataFrame with labelled features
+    :return: pandas.DataFrame containing data from dating site
+    """
+    dataset = pd.read_csv('dating_site_data.txt', delimiter = '\t', header = None)
     
     dataset.columns = ["frequentflyer_miles",
                        "videogame_hours",
@@ -11,7 +15,6 @@ def load_dataset():
                        "likes"]    
     return dataset
 
-# data preprocessing
 def encode_categorical(categorical_feature):
     """
     Encode labels of one categorical feature with value between 0 and n_categories-1.
@@ -45,11 +48,13 @@ def feature_scaling(features):
     
     return scaled_features
 
-# testing the performance of our knn algorithm on the data
 from knn import classify_point
 
 def dating_match_test():
-    train_test_ratio = 0.10
+    """
+    calculates the error rate of our knn algorithm on the dating site data
+    """
+    train_test_ratio = 0.2
     dataset = load_dataset()
     X = dataset.iloc[:, :-1].values
     X = feature_scaling(X)

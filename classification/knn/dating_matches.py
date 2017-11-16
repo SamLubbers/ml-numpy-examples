@@ -12,3 +12,13 @@ dataset.columns = ["frequentflyer_miles",
 
 X = dataset.iloc[:, :-1].values
 y = dataset.iloc[:, len(dataset.columns)-1].values
+
+# data preprocessing
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+y = encoder.fit_transform(y)
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X = sc.fit_transform(X)
+

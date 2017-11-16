@@ -2,16 +2,19 @@ import numpy as np
 import operator
 
 
-def classify_point(new_point, dataset, k):
+def classify_point(new_point, points, labels, k):
     """
     labels an unlabelled instance of a dataset using the k nearest neighbours algorithm
     :type new_point: numpy.ndarray
     :param new_point: unlabelled instance we want to label
                       features must be numeric values in order to calculate the distance
 
-    :type dataset: pandas.DataFrame
-    :param dataset: pandas 2D dataframe containing labelled instances.
-                    features must be numeric values in order to calculate the distance
+    :type points: numpy.ndarray
+    :param points: set of instances with one or more features
+                   features must be numeric values in order to calculate the distance
+
+    :type labels: numpy.ndarray
+    :param labels: labels corresponding to each instance
 
     :type k: int
     :param k: number of nearest neighbours we examine
@@ -19,8 +22,6 @@ def classify_point(new_point, dataset, k):
     :return: the label corresponding to new_point
     """
     # extract the data from the pandas dataframe
-    points = dataset.iloc[:, :-1].values
-    labels = dataset.iloc[:, len(dataset.columns) - 1].values
 
     # calculate euclidean distance from new point to all existing points
     num_instances = points.shape[0]
@@ -56,10 +57,14 @@ raw_data = [OrderedDict({'x': 0, 'y': 0 , 'label': 'A'}),
 
 dataset = pd.DataFrame(raw_data)
 
+# create numpy.ndarray of features and target variable
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, len(dataset.columns)-1].values
+
 # define new unlabelled instance
 new = np.array([[2, 2]])
 
 # classify unlabelled instance and display result
-new_label = classify_point(new, dataset, 3)
+new_label = classify_point(new, X, y, 3)
 
 print("point %s has label %s" % (str(new), new_label))

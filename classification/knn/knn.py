@@ -2,15 +2,15 @@ import numpy as np
 import operator
 
 
-def classify_point(new_point, points, labels, k):
+def classify_point(new_instance, instances, labels, k):
     """
     labels an unlabelled instance of a dataset using the k nearest neighbours algorithm
-    :type new_point: numpy.ndarray
-    :param new_point: unlabelled instance we want to label
+    :type new_instance: numpy.ndarray
+    :param new_instance: unlabelled instance we want to label
                       features must be numeric values in order to calculate the distance
 
-    :type points: numpy.ndarray
-    :param points: set of instances with one or more features
+    :type instances: numpy.ndarray
+    :param instances: set of instances with one or more features
                    features must be numeric values in order to calculate the distance
 
     :type labels: numpy.ndarray
@@ -24,8 +24,8 @@ def classify_point(new_point, points, labels, k):
     # extract the data from the pandas dataframe
 
     # calculate euclidean distance from new point to all existing points
-    num_instances = points.shape[0]
-    diff = np.tile(new_point, (num_instances, 1)) - points
+    num_instances = instances.shape[0]
+    diff = np.tile(new_instance, (num_instances, 1)) - instances
     squared_diff = diff ** 2
     sum_squared_diff = squared_diff.sum(axis=1)
     euclidean_distances = sum_squared_diff ** 0.5

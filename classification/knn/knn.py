@@ -41,5 +41,6 @@ def classify_point(new_point, points, labels, k):
     sorted_class_count = sorted(nearest_nieghbours_count.items(),
                                 key=operator.itemgetter(1),
                                 reverse=True)
+    
     winning_label = sorted_class_count[0][0]
     return winning_label

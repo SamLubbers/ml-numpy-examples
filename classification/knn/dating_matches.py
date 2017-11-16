@@ -45,14 +45,16 @@ def feature_scaling(features):
     
     return scaled_features
 
-# testing
+# testing the performance of our knn algorithm on the data
 from knn import classify_point
 
 def dating_match_test():
-    train_test_ratio = 0.2
+    train_test_ratio = 0.10
     dataset = load_dataset()
     X = dataset.iloc[:, :-1].values
+    X = feature_scaling(X)
     y = dataset.iloc[:, len(dataset.columns)-1].values
+    y = encode_categorical(y)
     num_instances = X.shape[0]
     num_test_instances = int(num_instances*train_test_ratio)
     error_counter = 0.0
@@ -61,7 +63,7 @@ def dating_match_test():
                                          X[num_test_instances:,:],
                                          y[num_test_instances:],
                                          3)
-        
+
         if predicted_label != y[i] : error_counter += 1.0
     
     print("the total error rate is: %f" % (error_counter/float(num_test_instances)))

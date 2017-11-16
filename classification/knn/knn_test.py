@@ -20,7 +20,7 @@ import numpy as np
 new = np.array([[2, 2]])
 
 # project must be set as working directory for relative input to work
-from classification.knn.knn import classify_point
+from knn import classify_point
 # classify unlabelled instance and display result
 new_label = classify_point(new, X, y, 3)
 

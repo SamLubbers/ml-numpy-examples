@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 # import dataset
 def load_dataset():
@@ -59,8 +58,10 @@ def dating_match_test():
     error_counter = 0.0
     for i in range(num_test_instances):
         predicted_label = classify_point(X[i, :], 
-                                         dataset[num_test_instances:],
+                                         X[num_test_instances:,:],
+                                         y[num_test_instances:],
                                          3)
+        
         if predicted_label != y[i] : error_counter += 1.0
     
     print("the total error rate is: %f" % (error_counter/float(num_test_instances)))

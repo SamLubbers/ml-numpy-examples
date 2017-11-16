@@ -14,7 +14,6 @@ X = dataset.iloc[:, :-1].values
 y = dataset.iloc[:, len(dataset.columns)-1].values
 
 # data preprocessing
-
 def encode_categorical(categorical_feature):
     """
     Encode labels of one categorical feature with value between 0 and n_categories-1.
@@ -33,7 +32,22 @@ def encode_categorical(categorical_feature):
     
 y = encode_categorical(y)
 
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X = sc.fit_transform(X)
+def feature_scaling(features):
+    """
+    Rescaling is applied to the range of features to scale the range in [0, 1]
+    :type features: numpy.ndarray
+    :param features: unscalled set of features
+    :return: scalled features with values in the range [0, 1]
+    """
+    min_vals = features.min(0)
+    max_vals = features.max(0)
+    ranges = max_vals - min_vals
+    num_instances = features.shape[0]
+    # rescaling operation
+    scaled_features = features - np.tile(min_vals, (num_instances, 1))
+    scaled_features = scaled_features / np.tile(ranges, (num_instances, 1))
+    
+    return scaled_features
+    
 
+X = feature_scaling(X)

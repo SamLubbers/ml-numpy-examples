@@ -3,15 +3,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # import dataset
-dataset = pd.read_csv('datingTestSet.txt', delimiter = '\t', header = None)
-
-dataset.columns = ["frequentflyer_miles",
-                   "videogame_hours",
-                   "icecream_liters",
-                   "likes"]
-
-X = dataset.iloc[:, :-1].values
-y = dataset.iloc[:, len(dataset.columns)-1].values
+def load_dataset():
+    dataset = pd.read_csv('datingTestSet.txt', delimiter = '\t', header = None)
+    
+    dataset.columns = ["frequentflyer_miles",
+                       "videogame_hours",
+                       "icecream_liters",
+                       "likes"]    
+    return dataset
 
 # data preprocessing
 def encode_categorical(categorical_feature):
@@ -29,8 +28,6 @@ def encode_categorical(categorical_feature):
         numerical_feature[i] = num_label
     
     return numerical_feature
-    
-y = encode_categorical(y)
 
 def feature_scaling(features):
     """
@@ -48,6 +45,24 @@ def feature_scaling(features):
     scaled_features = scaled_features / np.tile(ranges, (num_instances, 1))
     
     return scaled_features
-    
 
-X = feature_scaling(X)
+# testing
+from knn import classify_point
+
+def dating_match_test():
+    train_test_ratio = 0.2
+    dataset = load_dataset()
+    X = dataset.iloc[:, :-1].values
+    y = dataset.iloc[:, len(dataset.columns)-1].values
+    num_instances = X.shape[0]
+    num_test_instances = int(num_instances*train_test_ratio)
+    error_counter = 0.0
+    for i in range(num_test_instances):
+        predicted_label = classify_point(X[i, :], 
+                                         dataset[num_test_instances:],
+                                         3)
+        if predicted_label != y[i] : error_counter += 1.0
+    
+    print("the total error rate is: %f" % (error_counter/float(num_test_instances)))
+
+dating_match_test()

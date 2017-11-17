@@ -11,7 +11,7 @@ def file_to_vector(filename):
     :param filename: path to the file from which we want to extract the contents
     :return: numpy.ndarray of one column and n lines, n corresponding to the number of characters in the file
     """
-    with open(file_path, 'r') as f:
+    with open(filename, 'r') as f:
         text = f.read()
     num_characters = sum(len(line.strip()) for line in text)
     return_vector = np.zeros((1,num_characters)) # initialize vector

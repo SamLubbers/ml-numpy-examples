@@ -24,3 +24,11 @@ def file_to_vector(filename):
             i += 1
     
     return return_vector
+
+def label_extractor(filename):
+    """
+    extracts the label associated with a file by reading the filename
+    :param filename: name of file from which we want to extract the label
+    :return: label associated with the parsed file
+    """
+    return int(filename.split('_')[0])

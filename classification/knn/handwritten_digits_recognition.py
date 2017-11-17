@@ -32,3 +32,17 @@ def label_extractor(filename):
     :return: label associated with the parsed file
     """
     return int(filename.split('_')[0])
+
+def handwritten_digits_test():
+    """
+    measures the performance of knn when classifying handwritten digits
+    """
+    labels = []
+    training_files = listdir(train_digits)
+    num_instances = len(training_files)
+    characters_per_instance = 1024
+    X_train = np.zeros((num_instances, characters_per_instance))
+    for i in range(num_instances):
+        labels.append(label_extractor(training_files[i]))
+        file_path = path.join(train_digits, training_files[i])
+        X_train[i, :] = file_to_vector(file_path)

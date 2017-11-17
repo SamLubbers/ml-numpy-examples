@@ -2,8 +2,8 @@ import numpy as np
 from os import path, getcwd, listdir
 
 digits_dir = 'digits_data'
-train_digits = path.join(getcwd(), digits_dir, 'trainingDigits')
-test_digits = path.join(getcwd(), digits_dir, 'testDigits')
+train_digits_dir = path.join(getcwd(), digits_dir, 'trainingDigits')
+test_digits_dir = path.join(getcwd(), digits_dir, 'testDigits')
 
 def file_to_vector(filename):
     """
@@ -33,16 +33,33 @@ def label_extractor(filename):
     """
     return int(filename.split('_')[0])
 
+from knn import classify_point
+
 def handwritten_digits_test():
     """
     measures the performance of knn when classifying handwritten digits
     """
+    # load all training data features and labels
     labels = []
-    training_files = listdir(train_digits)
-    num_instances = len(training_files)
+    training_files = listdir(train_digits_dir)
+    num_train_instances = len(training_files)
     characters_per_instance = 1024
-    X_train = np.zeros((num_instances, characters_per_instance))
-    for i in range(num_instances):
+    X_train = np.zeros((num_train_instances, characters_per_instance))
+    for i in range(num_train_instances):
         labels.append(label_extractor(training_files[i]))
-        file_path = path.join(train_digits, training_files[i])
+        file_path = path.join(train_digits_dir, training_files[i])
         X_train[i, :] = file_to_vector(file_path)
+    # test and evaluate performance
+    test_files = listdir(test_digits_dir)
+    num_test_instances = len(test_files)
+    error_count = 0.0
+    for i in range(num_test_instances):
+        true_label = label_extractor(test_files[i])
+        file_path = path.join(test_digits_dir, test_files[i])
+        test_instance = file_to_vector(file_path)
+        predicted_label = classify_point(test_instance, X_train, labels, 3)
+        if(predicted_label != true_label): error_count += 1.0
+        
+    print('the total error rate is: %f' % (error_count/float(num_test_instances)))
+    
+handwritten_digits_test()

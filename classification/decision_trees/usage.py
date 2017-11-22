@@ -3,7 +3,7 @@ example usage of the decision_tree module
 """
 
 # create dataset
-from decision_trees import calculate_entropy, split_dataset, best_split_feature
+from decision_trees import *
 import pandas as pd
 from collections import OrderedDict
 
@@ -29,3 +29,6 @@ for subset in subsets:
 best_feature = best_split_feature(dataset)
 print('\nthe best feature by which to split our dataset is %s' % best_feature)
 
+# dominant feature value
+dominant_value = dominant_feature_value(dataset.iloc[:, 2])
+print('\ndominant value of the target variable of our dataset is: %s' % dominant_value )

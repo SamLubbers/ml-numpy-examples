@@ -3,7 +3,7 @@ example usage of the decision_tree module
 """
 
 # create dataset
-from decision_trees import calculate_entropy, split_dataset
+from decision_trees import calculate_entropy, split_dataset, best_split_feature
 import pandas as pd
 from collections import OrderedDict
 
@@ -23,3 +23,7 @@ subsets = split_dataset(dataset, split_feature)
 print('the subsets of splitting the dataset by feature %s are:' % split_feature)
 for subset in subsets:
     print(subset)
+
+# best feature split
+best_feature = best_split_feature(dataset)
+print('\nthe best feature by which to split our dataset is %s' % best_feature)

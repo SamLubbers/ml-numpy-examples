@@ -31,7 +31,6 @@ def split_dataset(dataset, feature):
     """ 
     subsets = []
     feature_unique_values= dataset[feature].unique()
-    
     for value in feature_unique_values:
         subsets.append(dataset.loc[dataset[feature] == value])
         
@@ -88,3 +87,29 @@ def dominant_feature_value(feature):
                                   reverse = True)
     dominant_value = sorted_unique_values[0][0]
     return dominant_value
+
+def create_tree(dataset):
+    """creates a decision tree out of the given dataset
+
+    :type dataset: pandas.dataframe
+    :type dataset: dataset of which we want to create the tree
+    :return: nested dictionary representing the decision tree
+    """
+    num_features = len(dataset.columns)
+    target_variable_vector = dataset.iloc[:, num_features - 1]
+    unique_labels = target_variable_vector.unique()
+    if len(unique_labels) == 1: # target variable values are all the same
+        return unique_labels[0]
+    if num_features == 2: # dataset only has one attribute and cannot be further split
+        return dominant_feature_value(target_variable_vector)
+
+    best_feature = best_split_feature(dataset)
+    my_tree = {best_feature: {}}
+    subsets = split_dataset(dataset, feature=best_feature)
+
+    best_feature_unique_values = dataset[best_feature].unique()
+    
+    for value, subset in zip(best_feature_unique_values, subsets):
+        my_tree[best_feature][value] = create_tree(subset)
+
+    return my_tree

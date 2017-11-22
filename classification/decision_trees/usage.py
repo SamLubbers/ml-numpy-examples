@@ -3,7 +3,7 @@ example usage of the decision_tree module
 """
 
 # create dataset
-from decision_trees import calculate_feature_entropy
+from decision_trees import calculate_entropy
 import pandas as pd
 from collections import OrderedDict
 
@@ -14,6 +14,5 @@ data_dict = [OrderedDict({"v1": 1, "v2": 1, "label":'yes'}),
 dataset = pd.DataFrame(data_dict)
 
 # calculate the entropy for our target variable
-target_variable = dataset.iloc[:, len(dataset.columns) - 1].values
-target_variable_entropy = calculate_feature_entropy(target_variable)
-print('entropy of the target variable is %f' % target_variable_entropy)
+entropy = calculate_entropy(dataset)
+print('entropy of the dataset is %f' % entropy)

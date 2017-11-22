@@ -32,3 +32,7 @@ print('\nthe best feature by which to split our dataset is %s' % best_feature)
 # dominant feature value
 dominant_value = dominant_feature_value(dataset.iloc[:, 2])
 print('\ndominant value of the target variable of our dataset is: %s' % dominant_value )
+
+# create decision tree out of dataset
+decision_tree = create_tree(dataset)
+print(decision_tree)

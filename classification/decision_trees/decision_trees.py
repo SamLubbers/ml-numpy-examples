@@ -1,5 +1,5 @@
 from math import log
-
+import operator
 
 def calculate_entropy(dataset):
     """calculates the entropy of the given dataset
@@ -38,7 +38,7 @@ def split_dataset(dataset, feature):
     return subsets
 
 def best_split_feature(dataset):
-    """identifies the best feature by which to split the dataset for a decision tree
+    """identifies the best feature by which to split a dataset to organise data in a decision tree
 
     the best feature is chosen according to the ID3 algorithm,
     which states that the best feature is the one with the maximum information gain
@@ -67,3 +67,24 @@ def best_split_feature(dataset):
 
     return best_feature
 
+def dominant_feature_value(feature):
+    """returns the most dominant value of a given feature.
+
+    used to assign a value to a leaf node with more than one label
+    :type feature: pandas.series
+    :param feature: feature of a dataset
+    :return: dominant value of the given feature
+    """
+    unique_values = feature.unique()
+    if len(unique_values) == 1: # return if there is feature only has one label
+        return feature[0]
+
+    value_count = {}
+    for value in unique_values:
+        value_count[value] = len(feature[feature == value])
+
+    sorted_unique_values = sorted(value_count.items(),
+                                  key=operator.itemgetter(1),
+                                  reverse = True)
+    dominant_value = sorted_unique_values[0][0]
+    return dominant_value

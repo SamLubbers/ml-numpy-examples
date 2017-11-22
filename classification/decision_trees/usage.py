@@ -8,9 +8,10 @@ import pandas as pd
 from collections import OrderedDict
 
 data_dict = [OrderedDict({"v1": 1, "v2": 1, "label":'yes'}),
+             OrderedDict({"v1": 1, "v2": 1, "label":'yes'}),
              OrderedDict({"v1": 1, "v2": 0, "label":'no'}),
              OrderedDict({"v1": 0, "v2": 1, "label":'no'}),
-             OrderedDict({"v1": 0, "v2": 0, "label":'no'})]
+             OrderedDict({"v1": 0, "v2": 1, "label": 'no'})]
 dataset = pd.DataFrame(data_dict)
 
 # calculate the entropy for our target variable
@@ -27,3 +28,4 @@ for subset in subsets:
 # best feature split
 best_feature = best_split_feature(dataset)
 print('\nthe best feature by which to split our dataset is %s' % best_feature)
+

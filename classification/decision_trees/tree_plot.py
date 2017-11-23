@@ -77,4 +77,3 @@ def create_plot(my_tree):
     plot_tree.y_off = root_coordinates[1] # offset of the y coordinate
     plot_tree(my_tree, root_coordinates, '')
     plt.show()
-    

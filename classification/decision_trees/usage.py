@@ -4,6 +4,7 @@ example usage of the decision_tree module
 
 # create dataset
 from decision_trees import *
+
 import pandas as pd
 from collections import OrderedDict
 
@@ -36,3 +37,6 @@ print('\ndominant value of the target variable of our dataset is: %s' % dominant
 # create decision tree out of dataset
 decision_tree = create_tree(dataset)
 print(decision_tree)
+
+from tree_plot import create_plot
+create_plot(decision_tree)

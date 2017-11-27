@@ -43,3 +43,5 @@ def word2vector(vocab_list, text):
         else:
             word_vec.append(0)
     return word_vec
+
+word_vectors = [word2vector(vocabulary, review) for review in dataset['review']]

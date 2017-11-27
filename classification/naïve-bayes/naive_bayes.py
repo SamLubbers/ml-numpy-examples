@@ -1,4 +1,6 @@
 """implementation of naive bayes algorithm"""
+import numpy as np
+
 def calculate_priors(target_variable):
     """
     calculates the prior probability of each class contained in a vector

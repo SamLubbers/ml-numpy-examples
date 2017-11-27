@@ -1,17 +1,4 @@
 """convert text of words to a vector of features"""
-import pandas as pd
-from collections import OrderedDict
-
-# data on restaurant reviews
-raw_data = [OrderedDict({"review":"the food was incredible","positive":1}),
-            OrderedDict({"review":"we had such a great time","positive":1}),
-            OrderedDict({"review":"we loved the delicious starters they had","positive":1}),
-            OrderedDict({"review":"the service was awful","positive":0}),
-            OrderedDict({"review":"did not like the desserts","positive":0}),
-            OrderedDict({"review":"the cutlery was not clean","positive":0}),
-            ]
-
-dataset = pd.DataFrame(raw_data)
 
 def create_vocabulary(documents):
     """creates a list of all the words contained in a set of documents
@@ -26,7 +13,6 @@ def create_vocabulary(documents):
     
     return list(vocabulary_set)
 
-vocabulary = create_vocabulary(dataset['review'].values)
 
 def word2vector(vocab_list, text):
     """converts a text onto a vector with vocabulary words as features
@@ -43,5 +29,3 @@ def word2vector(vocab_list, text):
         else:
             word_vec.append(0)
     return word_vec
-
-word_vectors = [word2vector(vocabulary, review) for review in dataset['review']]

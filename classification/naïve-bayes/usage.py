@@ -20,7 +20,7 @@ from word_embedding import create_vocabulary, word2vector
 
 vocabulary = create_vocabulary(X)
 
-word_vectors = [word2vector(vocabulary, review) for review in X]
+word_vectors = [word2vector(vocabulary, review.split()) for review in X]
 
 # calcualte probabilities
 from naive_bayes import calculate_priors, calcualte_feature_likelihods
@@ -38,4 +38,3 @@ if new_review_label == 1:
     print('the review \'%s\' is classified as positive' % new_review)
 elif new_review_label == 0:
     print('the review \'%s\' is labelled as negative' % new_review)
-    

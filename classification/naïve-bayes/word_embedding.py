@@ -1,5 +1,5 @@
 """convert text of words to a vector of features"""
-
+import numpy as np
 def create_vocabulary(documents):
     """creates a list of all the words contained in a set of documents
     :type documents: numpy.ndarray or list of strings
@@ -14,18 +14,15 @@ def create_vocabulary(documents):
     return list(vocabulary_set)
 
 
-def word2vector(vocab_list, text):
-    """converts a text onto a vector with vocabulary words as features
+def word2vector(vocab_list, bag_of_words):
+    """converts a bag of words onto a vector with vocabulary words as features
     with value 1 if word occurs in text and 0 if it doesn't
     :param vocab_list: set of words in our vocabulary
-    :param text: text we want to convert to a vector
+    :param bag_of_words: text we want to convert to a vector
     :return: vector representing text
     """
-    word_vec = []
-    text = text.split()
-    for word in vocab_list:
-        if word in text:
-            word_vec.append(1)
-        else:
-            word_vec.append(0)
+    word_vec = np.zeros(len(vocab_list))
+    for word in bag_of_words:
+        if word in vocab_list:
+            word_vec[vocab_list.index(word)] += 1
     return word_vec

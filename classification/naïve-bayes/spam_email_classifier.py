@@ -76,16 +76,16 @@ X_train, X_test, y_train, y_test = train_test_split(emails, labels, test_size=0.
 # test classification of spam
 from naive_bayes import classify_document_NB
 
-correct = 0
+wrong_guesses = 0
 for index, test_instance in enumerate(X_test):
     predicted_label = classify_document_NB(test_instance,
                                            X_train,
                                            y_train)
     actual_label = y_test[index]
 
-    if predicted_label == actual_label:
-        correct += 1
+    if predicted_label != actual_label:
+        wrong_guesses += 1
 
-error_rate = correct/len(X_test)
+error_rate = wrong_guesses/len(X_test)
 
 print('this spam classifier has an error rate of %f' % error_rate)

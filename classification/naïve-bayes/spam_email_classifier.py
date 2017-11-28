@@ -1,5 +1,5 @@
 import re
-from os import path
+from os import path, listdir
 
 
 def parse_document(document):
@@ -8,19 +8,37 @@ def parse_document(document):
     :param document: string of words and other characters
     :return: bag of words (list) with all the relevant words contained in the document
     """
-    stopwords = ['for', 'a', 'is', 'and', 'we']
+    stopwords = ['for', 'and', 'you', 'your']
 
     document = document.lower()
     document = re.sub(r'[^a-zA-Z]', ' ', document) # remove special characters and numbers
     document = re.sub(r' +', ' ', document).strip() # remove extra spaces
     bag_of_words = document.split()
 
-    bag_of_words = [word for word in bag_of_words if word not in stopwords] # remove stopwords
+    bag_of_words = [word for word in bag_of_words if word not in stopwords and len(word) > 2] # remove stopwords
     return bag_of_words
 
+# load email data
 email_dataset = 'email_data'
-email_file = path.join(email_dataset, 'spam','1.txt')
+spam_directory = path.join(email_dataset, 'spam')
+non_spam_directory = path.join(email_dataset, 'ham')
 
-mail = open(email_file).read()
-parsed_email = parse_document(mail)
-print(parsed_email)
+spam_files = [file for file in listdir(spam_directory)]
+non_spam_files = [file for file in listdir(non_spam_directory)]
+
+emails = []
+all_words = []
+labels = []
+
+for file in spam_files:
+    parsed_email = parse_document(open(path.join(spam_directory, file)).read())
+    emails.append(parsed_email)
+    all_words.extend(parsed_email)
+    labels.append(1)
+
+
+for file in non_spam_files:
+    parsed_email = parse_document(open(path.join(non_spam_directory, file)).read())
+    emails.append(parsed_email)
+    all_words.extend(parsed_email)
+    labels.append(0)

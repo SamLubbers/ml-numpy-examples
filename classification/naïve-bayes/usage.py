@@ -14,13 +14,15 @@ raw_data = [OrderedDict({"review":"the food was good","positive":1}),
 # convert data to pandas dataframe
 dataset = pd.DataFrame(raw_data)
 X = dataset['review'].values
+X = [review.split() for review in X] # convert document to list of words
+
 y = dataset['positive'].values
 
 from word_embedding import create_vocabulary, word2vector
 
 vocabulary = create_vocabulary(X)
 
-word_vectors = [word2vector(vocabulary, review.split()) for review in X]
+word_vectors = [word2vector(vocabulary, review) for review in X]
 
 # calcualte probabilities
 from naive_bayes import calculate_priors, calcualte_feature_likelihods

@@ -8,7 +8,6 @@ def create_vocabulary(documents):
     """
     vocabulary_set = set([])
     for doc in documents:
-        doc = doc.split()
         vocabulary_set = vocabulary_set | set(doc) # union of 2 sets
     
     return list(vocabulary_set)

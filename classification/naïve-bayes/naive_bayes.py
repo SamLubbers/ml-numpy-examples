@@ -44,7 +44,7 @@ def calcualte_feature_likelihods(vector_documents, target_variable):
 
     return feature_likelihoods
 
-def classify_NB(new_vector_document, vector_documents, target_variable):
+def classify_document_NB(new_vector_document, vector_documents, target_variable):
     """determines the category of a new document
 
     :param new_vector_document: vector of words representing the document we want to classify

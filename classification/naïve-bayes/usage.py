@@ -29,10 +29,10 @@ priors = calculate_priors(y)
 feature_likelihoods = calcualte_feature_likelihods(word_vectors, y)
 
 # determine the label of a new category
-from naive_bayes import classify_NB
+from naive_bayes import classify_document_NB
 new_review = "we had a very good time"
 new_vector = word2vector(vocabulary, new_review)
-new_review_label = classify_NB(new_vector, word_vectors, y)
+new_review_label = classify_document_NB(new_vector, word_vectors, y)
 
 if new_review_label == 1:
     print('the review \'%s\' is classified as positive' % new_review)

@@ -1,6 +1,7 @@
 import re
 from os import path, listdir
-
+import random
+from math import floor
 
 def parse_document(document):
     """converts document in string format onto a bag of words in list format with only relevant words
@@ -27,18 +28,25 @@ spam_files = [file for file in listdir(spam_directory)]
 non_spam_files = [file for file in listdir(non_spam_directory)]
 
 emails = []
-all_words = []
 labels = []
 
 for file in spam_files:
     parsed_email = parse_document(open(path.join(spam_directory, file)).read())
     emails.append(parsed_email)
-    all_words.extend(parsed_email)
     labels.append(1)
 
 
 for file in non_spam_files:
     parsed_email = parse_document(open(path.join(non_spam_directory, file)).read())
     emails.append(parsed_email)
-    all_words.extend(parsed_email)
     labels.append(0)
+
+# convert bag of words to vectors
+from word_embedding import create_vocabulary, word2vector
+
+vocabulary = create_vocabulary(emails)
+X = [word2vector(vocabulary, email) for email in emails]
+
+# TODO train test split
+
+# TODO classify test sets and calcualte error rate

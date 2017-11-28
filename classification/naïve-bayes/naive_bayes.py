@@ -1,5 +1,6 @@
 """implementation of naive bayes algorithm"""
 import numpy as np
+import operator
 
 def calculate_priors(target_variable):
     """
@@ -42,3 +43,23 @@ def calcualte_feature_likelihods(vector_documents, target_variable):
         feature_likelihoods[category] = np.log(feature_count[category]/total_features[category])
 
     return feature_likelihoods
+
+def classify_NB(new_vector_document, vector_documents, target_variable):
+    """determines the category of a new document
+
+    :param new_vector_document: vector of words representing the document we want to classify
+    :param vector_documents: set of vectors representing words in a document
+    :param target_variable: vector containing category associated to each instance
+    :return: category of new_vector_document
+    """
+    priors = calculate_priors(target_variable)
+    feature_likelihoods = calcualte_feature_likelihods(vector_documents, target_variable)
+    categories = np.unique(target_variable)
+    probabilities = {} # probability associated of the new instance belonging to each category
+    for category in categories:
+        probabilities[category] = np.sum(new_vector_document * feature_likelihoods[category]) + np.log(priors[category])
+
+    # get the category with the highest probability
+    predicted_category = max(probabilities.items(), key=operator.itemgetter(1))[0]
+
+    return predicted_category

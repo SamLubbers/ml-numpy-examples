@@ -45,7 +45,7 @@ for file in non_spam_files:
 from word_embedding import create_vocabulary, word2vector
 
 vocabulary = create_vocabulary(emails)
-X = [word2vector(vocabulary, email) for email in emails]
+emails = [word2vector(vocabulary, email) for email in emails]
 
 # splitting into training set and test set
 def train_test_split(X, y, test_size=0.2):
@@ -73,4 +73,19 @@ def train_test_split(X, y, test_size=0.2):
 
 X_train, X_test, y_train, y_test = train_test_split(emails, labels, test_size=0.2)
 
-# TODO classify test sets and calcualte error rate
+# test classification of spam
+from naive_bayes import classify_document_NB
+
+correct = 0
+for index, test_instance in enumerate(X_test):
+    predicted_label = classify_document_NB(test_instance,
+                                           X_train,
+                                           y_train)
+    actual_label = y_test[index]
+
+    if predicted_label == actual_label:
+        correct += 1
+
+error_rate = correct/len(X_test)
+
+print('this spam classifier has an error rate of %f' % error_rate)

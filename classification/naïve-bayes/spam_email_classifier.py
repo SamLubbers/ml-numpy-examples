@@ -47,6 +47,30 @@ from word_embedding import create_vocabulary, word2vector
 vocabulary = create_vocabulary(emails)
 X = [word2vector(vocabulary, email) for email in emails]
 
-# TODO train test split
+# splitting into training set and test set
+def train_test_split(X, y, test_size=0.2):
+    """split dataset into training sets and test sets
+
+    :param X: matrix of features
+    :param y: vector of labels
+    :return: training and test sets for X and y. X_train, X_test, y_train, y_test
+    """
+    num_test_instances = round(len(X) * test_size)
+
+    X_test = []
+    y_test = []
+    for i in range(num_test_instances):
+        instance_index = floor(random.uniform(0, len(X)))
+        X_test.append(X[instance_index])
+        y_test.append(y[instance_index])
+        del(X[instance_index])
+        del(y[instance_index])
+
+    X_train = X # assign X to training set as we have deleted all test instances from X
+    y_train = y # assign y to training set as we have deleted all test instances from y
+
+    return X_train, X_test, y_train, y_test
+
+X_train, X_test, y_train, y_test = train_test_split(emails, labels, test_size=0.2)
 
 # TODO classify test sets and calcualte error rate

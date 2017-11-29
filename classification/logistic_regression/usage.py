@@ -15,6 +15,8 @@ y = dataset.iloc[:, -1:].values
 
 
 # calculate optimal weights
-from logistic_regression import optimal_weights
+from logistic_regression import optimal_weights_gradient_ascent, optimal_weights_stochastic_ascent
 
-weights = optimal_weights(X, y)
+weights = optimal_weights_gradient_ascent(X, y)
+
+weights_stochastic = optimal_weights_stochastic_ascent(X, y)

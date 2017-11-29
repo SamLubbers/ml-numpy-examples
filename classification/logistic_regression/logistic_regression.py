@@ -1,5 +1,5 @@
 import numpy as np
-
+import random
 def sigmoid(z):
     """applies sigmoid function on z
     :param z: input to the sigmoid function
@@ -19,7 +19,7 @@ def optimal_weights_gradient_ascent(data, labels, alpha=0.001, max_cycles=500):
     data_matrix = np.mat(data)
     labels_matrix = np.mat(labels)
     m, n = data_matrix.shape
-    weights = np.ones((n, 1)) # vector containing one weight for each feature
+    weights = np.ones((n, 1)) # matrix containing one weight for each feature
     for _ in range(max_cycles):
         predictions = sigmoid(data_matrix*weights)
         error_rate = (labels_matrix - predictions)
@@ -27,7 +27,7 @@ def optimal_weights_gradient_ascent(data, labels, alpha=0.001, max_cycles=500):
 
     return weights.getA()
 
-def optimal_weights_stochastic_ascent(data, labels, alpha=0.01):
+def optimal_weights_stochastic_ascent(data, labels, num_iter=150,alpha=0.01):
     """uses stochastic gradient ascent to calculate the optimal weight for each feature
 
     :type data: numpy.ndarray (m, n)
@@ -36,11 +36,14 @@ def optimal_weights_stochastic_ascent(data, labels, alpha=0.01):
     :param labels: set of labels associated to each instance
     :return: numpy.ndarray of optimal weights for each feature
     """
-    num_features = len(data[0])
-    weights = np.ones(num_features)  # vector containing one weight for each feature
-    for index, instance in enumerate(data):
-        prediction = sigmoid(sum(instance*weights))
-        error_rate = (labels[index] - prediction)
-        weights = weights + alpha * instance * error_rate
+    m, n = data.shape
+    weights = np.ones(n)  # vector containing one weight for each feature
+    for j in range(num_iter):
+        unaccessed_indexes = range(m)
+        for i in range(m):
+            random_index = int(random.uniform(0, len(unaccessed_indexes)))
+            prediction = sigmoid(sum(data[random_index]*weights))
+            error_rate = (labels[random_index] - prediction)
+            weights = weights + alpha * data[random_index] * error_rate
 
     return weights

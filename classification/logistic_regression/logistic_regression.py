@@ -10,9 +10,9 @@ def sigmoid(z):
 def optimal_weights(data, labels, alpha=0.001, max_cycles=500):
     """uses gradient ascent to calculate the optimal weight for each feature
 
-    :type data: numpy.ndarray
+    :type data: numpy.ndarray (m, n)
     :param data: set of instances and features
-    :type labels: numpy.ndarray vector
+    :type labels: numpy.ndarray (m, 1)
     :param labels: set of labels associated to each instance
     :return: list of optimal weights for each feature
     """

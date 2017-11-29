@@ -10,3 +10,8 @@ y_train = dataset_train.iloc[:, len(dataset_train.columns)-1].values
 
 X_test = dataset_test.iloc[:, :-1].values
 y_test = dataset_test.iloc[:, len(dataset_test.columns)-1].values
+
+# obtaining optimal weight values
+from logistic_regression import optimal_weights_stochastic_ascent
+weights = optimal_weights_stochastic_ascent(X_train, y_train)
+

@@ -27,7 +27,7 @@ def optimal_weights_gradient_ascent(data, labels, alpha=0.001, max_cycles=500):
 
     return weights.getA()
 
-def optimal_weights_stochastic_ascent(data, labels, num_iter=150,alpha=0.01):
+def optimal_weights_stochastic_ascent(data, labels, num_iter=150):
     """uses stochastic gradient ascent to calculate the optimal weight for each feature
 
     :type data: numpy.ndarray (m, n)
@@ -36,11 +36,15 @@ def optimal_weights_stochastic_ascent(data, labels, num_iter=150,alpha=0.01):
     :param labels: set of labels associated to each instance
     :return: numpy.ndarray of optimal weights for each feature
     """
+    alpha_start_value = 4
+    alpha_constant = 0.01
+
     m, n = data.shape
     weights = np.ones(n)  # vector containing one weight for each feature
     for j in range(num_iter):
         unaccessed_indexes = range(m)
         for i in range(m):
+            alpha = alpha_start_value/(1.0+j+i) + alpha_constant # step size decreases as iterations increase
             random_index = int(random.uniform(0, len(unaccessed_indexes)))
             prediction = sigmoid(sum(data[random_index]*weights))
             error_rate = (labels[random_index] - prediction)

@@ -51,3 +51,14 @@ def optimal_weights_stochastic_ascent(data, labels, num_iter=150):
             weights = weights + alpha * data[random_index] * error_rate
 
     return weights
+
+
+def classify_logistic_regression(new_vector, weights):
+    """classifies a new instance using the sigmoid function
+
+    :param new_vector: vector of features that we want to classify
+    :param weights: optimal weights associated to each feature in the vector
+    :return: predicted class label (0 or 1)
+    """
+    prob = sigmoid(sum(new_vector*weights))
+    return 0 if prob < 0.5 else 1

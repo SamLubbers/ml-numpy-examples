@@ -13,3 +13,12 @@ def select_alpha2(alpha1, num_alphas):
         alpha2 = random.uniform(0, num_alphas)
 
     return alpha2
+
+def bound_alpha(alpha, max_limit, min_limit):
+    """bounds alpha value between certain limits"""
+    if alpha > max_limit:
+        alpha = max_limit
+    if alpha < min_limit:
+        alpha = min_limit
+
+    return alpha

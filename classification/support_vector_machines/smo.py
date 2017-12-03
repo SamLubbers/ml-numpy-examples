@@ -34,10 +34,24 @@ def instance_error_rate(i, data_matrix, labels_matrix, alphas, bias):
     return error_i
 
 def can_be_optimized(alpha, label, error, C, tolerance):
-    """determines if a certain value of alpha can be optimized"""
+    """determines if a certain value of alpha can be optimized
+
+    - the error rate for the current instance must surpass the tolerance
+    - alphas must not be bounded
+    """
     if ((label * error < -tolerance) and (alpha < C)) or ((label * error > tolerance) and (alpha > 0)):
         return True
     return False
+
+def define_limits(label_i, label_j, alpha_i, alpha_j, C):
+    """defines min and max limits given certain values of alpha"""
+    if label_i != label_j:
+        min_limit = max(0, alpha_j - alpha_i)
+        max_limit = min(C, C + alpha_j - alpha_i)
+    else:
+        min_limit = max(0, alpha_j + alpha_i - C)
+        max_limit = min(C, alpha_j + alpha_i)
+    return min_limit, max_limit
 
 def smo_simple(data, labels, C, tolerance, max_iterations):
     """simple implementation of the smo algorithm
@@ -64,6 +78,20 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
         alpha_pairs_changed = 0
         for i in range(m):
             error_i = instance_error_rate(i, data_matrix, labels_matrix, alphas, bias)
+            if can_be_optimized(alphas[i], labels_matrix[i], error_i, C, tolerance):
+                # if alpha can be optimized get another instance at random
+                j = random_index(i, m)
+                error_j = instance_error_rate(j, data_matrix, labels_matrix, alphas, bias)
+                # make sure alpha stays between 0 and C
+                min_limit, max_limit = define_limits(labels_matrix[i],
+                                                     labels_matrix[j],
+                                                     alphas[i],
+                                                     alphas[j],
+                                                     C)
+                if min_limit == max_limit:
+                    continue # loop over to the next instance as alpha values for this instance are bound
+                
+
 
         if alpha_pairs_changed == 0:
             iteration += 1

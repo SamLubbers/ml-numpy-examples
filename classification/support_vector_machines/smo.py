@@ -168,7 +168,7 @@ def calculate_hyperplane_parameters(alphas, data, labels):
     data_matrix = np.mat(data)
     labels_matrix = np.mat(labels)
     m, n = data_matrix.shape
-    w = np.zeros((n, 1))
+    w = np.mat(np.zeros((n, 1)))
     for instance, label, alpha in zip(data_matrix, labels_matrix, alphas):
         w += np.multiply(alpha * label, instance.T)
     return w

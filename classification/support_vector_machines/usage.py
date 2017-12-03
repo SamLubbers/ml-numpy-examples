@@ -20,3 +20,8 @@ for instance, label, alpha in zip(X, y, alphas):
 # calculate hyperplane parameters
 from smo import calculate_hyperplane_parameters
 w = calculate_hyperplane_parameters(alphas, X, y)
+
+# classifiy new instance
+from svm import classify_svm_linear
+import numpy as np
+label = classify_svm_linear(np.mat(X[0]), w, bias)

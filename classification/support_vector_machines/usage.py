@@ -12,3 +12,8 @@ tolerance = 0.001
 iterations = 40
 alphas, bias = smo_simple(X, y, C, tolerance, iterations)
 
+# see which points are support vectors
+for instance, label, alpha in zip(X, y, alphas):
+    if alpha > 0:
+        print('Support Vector:', instance, label)
+        

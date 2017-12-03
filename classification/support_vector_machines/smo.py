@@ -33,6 +33,12 @@ def instance_error_rate(i, data_matrix, labels_matrix, alphas, bias):
     error_i = prediction_i - float(labels_matrix[i])
     return error_i
 
+def can_be_optimized(alpha, label, error, C, tolerance):
+    """determines if a certain value of alpha can be optimized"""
+    if ((label * error < -tolerance) and (alpha < C)) or ((label * error > tolerance) and (alpha > 0)):
+        return True
+    return False
+
 def smo_simple(data, labels, C, tolerance, max_iterations):
     """simple implementation of the smo algorithm
 

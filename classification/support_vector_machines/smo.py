@@ -153,3 +153,22 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
             iteration = 0
 
     return alphas, bias
+
+def calculate_hyperplane_parameters(alphas, data, labels):
+    """calculates the parameters of the hyperplane (w) given the alpha values
+
+    :type alphas: numpy.matrix (m, 1)
+    :param alphas: "weights" associated to each instance. Only support vectors will have non-zero alphas
+    :type data: numpy.ndarray (m, n)
+    :param data: set of instances and features
+    :type labels: numpy.ndarray (m, 1)
+    :param labels: set of labels associated to each instance. Labels must be -1 or 1
+    :return: vector containing all constants (except the bias) that define the hyperplane
+    """
+    data_matrix = np.mat(data)
+    labels_matrix = np.mat(labels)
+    m, n = data_matrix.shape
+    w = np.zeros((n, 1))
+    for instance, label, alpha in zip(data_matrix, labels_matrix, alphas):
+        w += np.multiply(alpha * label, instance.T)
+    return w

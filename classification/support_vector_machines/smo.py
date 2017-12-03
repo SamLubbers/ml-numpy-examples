@@ -53,6 +53,17 @@ def define_limits(label_i, label_j, alpha_i, alpha_j, C):
         max_limit = min(C, alpha_j + alpha_i)
     return min_limit, max_limit
 
+def optimal_change_factor(instance_i, instance_j):
+    """calculates the optimal amount by which to change alpha_j
+
+    :param instance_i: matrix of features of instance i of the data: data_matrix[i, :]
+    :param instance_j: matrix of features of instance i of the data: data_matrix[j, :]
+    :return: optimal change factor of alpha_j
+    """
+
+    ocf = 2.0 * instance_i * instance_j.T - instance_i * instance_i.T - instance_j * instance_j.T
+    return ocf
+
 def smo_simple(data, labels, C, tolerance, max_iterations):
     """simple implementation of the smo algorithm
 
@@ -90,8 +101,9 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
                                                      C)
                 if min_limit == max_limit:
                     continue # loop over to the next instance as alpha values for this instance are bound
+                # calculate optimal amount by which to change alpha_j
+                ocf = optimal_change_factor(instance_i=data_matrix[i, :], instance_j=data_matrix[j, :])
                 
-
 
         if alpha_pairs_changed == 0:
             iteration += 1

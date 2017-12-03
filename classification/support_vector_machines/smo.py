@@ -2,18 +2,20 @@
 import random
 import numpy as np
 
-def select_alpha2(alpha1, num_alphas):
-    """a random value is chosen for alpha2 as long as it does not equal alpha1
+def random_index(i, set_size):
+    """finds a random index used to access an item in a set (list, numpy.array ...)
 
-    :param alpha1: value which alpha2 cannot take
-    :param num_alphas: total number of alphas
-    :return: integer that will be the value for alpha2
+    this index must be within the boundaries of the set size and cannot equal index i
+    it is used in the smo algorithm to get the index of the second alpha value used in the optimization
+
+    :param i: value which the new index cannot have
+    :param set_size: total number of instances in our set
+    :return: index of alpha2 value
     """
-    alpha2 = alpha1
-    while(alpha2==alpha1):
-        alpha2 = random.uniform(0, num_alphas)
-
-    return alpha2
+    j = i
+    while(j==i):
+        j = int(random.uniform(0, set_size))
+    return j
 
 def bound_alpha(alpha, max_limit, min_limit):
     """bounds alpha value between certain limits"""
@@ -23,6 +25,13 @@ def bound_alpha(alpha, max_limit, min_limit):
         alpha = min_limit
 
     return alpha
+
+def instance_error_rate(i, data_matrix, labels_matrix, alphas, bias):
+    """calculates the error rate of an instance i in our dataset given the current alphas and bias values"""
+
+    prediction_i = float(np.multiply(alphas, labels_matrix).T * (data_matrix * data_matrix[i, :].T)) + bias
+    error_i = prediction_i - float(labels_matrix[i])
+    return error_i
 
 def smo_simple(data, labels, C, tolerance, max_iterations):
     """simple implementation of the smo algorithm
@@ -38,7 +47,7 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
     """
     # numpy array to matrix for easier operations
     data_matrix = np.mat(data)
-    labels_matrix = np.mat(labels).transpose()
+    labels_matrix = np.mat(labels)
     # initialize alphas and bias
     m, n = data_matrix.shape
     alphas = np.zeros((m, 1))
@@ -47,10 +56,12 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
     iteration = 0
     while(iteration<max_iterations):
         alpha_pairs_changed = 0
-        # TODO write optimization code here
+        for i in range(m):
+            error_i = instance_error_rate(i, data_matrix, labels_matrix, alphas, bias)
+
         if alpha_pairs_changed == 0:
             iteration += 1
         else:
             iteration = 0
-            
+
     return alphas, bias

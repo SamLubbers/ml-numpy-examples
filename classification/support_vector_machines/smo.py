@@ -82,7 +82,7 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
     labels_matrix = np.mat(labels)
     # initialize alphas and bias
     m, n = data_matrix.shape
-    alphas = np.zeros((m, 1))
+    alphas = np.mat(np.zeros((m, 1)))
     bias = 0
     # run optimization
     min_alpha_change = 0.00001

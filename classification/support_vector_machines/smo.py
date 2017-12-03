@@ -64,6 +64,7 @@ def optimal_change_factor(instance_i, instance_j):
     ocf = 2.0 * instance_i * instance_j.T - instance_i * instance_i.T - instance_j * instance_j.T
     return ocf
 
+
 def smo_simple(data, labels, C, tolerance, max_iterations):
     """simple implementation of the smo algorithm
 
@@ -113,15 +114,38 @@ def smo_simple(data, labels, C, tolerance, max_iterations):
                 # this is an oversimplification of the original smo algorithm
                 if ocf >= 0: continue
 
-                # calculate new alpha value of j
+                # define old alpha values
+                alpha_i_old = alphas[i].copy()
                 alpha_j_old = alphas[j].copy()
+
+                # calculate new alpha value of j
                 alphas[j] -= labels_matrix[j] * (error_i - error_j) / ocf
                 alphas[j] = bound_alpha(alphas[j], max_limit, min_limit)
 
                 # if change in alpha is not notable move onto next instances
-                alpha_j_new = alphas[j]
-                if abs(alpha_j_new - alpha_j_old) < min_alpha_change: continue
+                if abs(alphas[j] - alpha_j_old) < min_alpha_change: continue
 
+                # update alpha_i by the same amount as alpha_j in the opposite direction
+                alphas[i] += labels_matrix[j] * labels_matrix[i] * (alpha_j_old - alphas[j])
+
+                # obtain bias values for each alpha
+                bias_i = bias \
+                         - error_i \
+                         - labels_matrix[i] * (alphas[i] - alpha_i_old) * data_matrix[i,:] * data_matrix[i, :].T \
+                         - labels_matrix[j] * (alphas[j] - alpha_j_old) * data_matrix[i, :] * data_matrix[j, :].T
+
+                bias_j = bias \
+                         - error_j \
+                         - labels_matrix[i] * (alphas[i] - alpha_i_old) * data_matrix[i,:] * data_matrix[j, :].T \
+                         - labels_matrix[j] * (alphas[j] - alpha_j_old) * data_matrix[j, :] * data_matrix[j, :].T
+
+                # define new bias
+                if (0 < alphas[i]) and (alphas[i] < C): bias = bias_i
+                elif (0 < alphas[j]) and (alphas[j] < C): bias = bias_j
+                else: bias = (bias_i + bias_j) / 2.0
+
+                # increment count
+                alpha_pairs_changed += 1
 
         if alpha_pairs_changed == 0:
             iteration += 1

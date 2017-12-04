@@ -11,7 +11,8 @@ def classify_stump(feature, split_value, class_assignment):
     :param class_assignment: specifies which side of the split gets which label
     :return: vector of predicted labels for all instances
     """
-    prediction = np.ones(len(feature), 1)
+    feature = feature.T
+    prediction = np.ones((len(feature), 1))
     if class_assignment == 'less_than':
         prediction[feature <= split_value] = -1.0
     elif class_assignment == 'greater_than':
@@ -35,7 +36,7 @@ def find_best_stump(data, labels, instance_weights):
     # return variables
     best_stump = {'feature_index': None,
                   'split_value': None}
-    best_prediction = np.mat(np.zeros(len(labels), 1))
+    best_prediction = np.mat(np.zeros((len(labels), 1)))
     min_weighted_error = np.inf
 
     # algorithm
@@ -47,13 +48,11 @@ def find_best_stump(data, labels, instance_weights):
             for class_assignment in ['less_than', 'greater_than']:
                 split_value = feature.min() + (step_size * step_number)
                 prediction = classify_stump(feature, split_value, class_assignment)
-                prediction_errors = (prediction == labels_matrix).astype(int)
+                prediction_errors = (prediction != labels_matrix).astype(int)
                 weighted_error = instance_weights.T * prediction_errors
 
-                print('split feature: %d, split value: %d, weighted_error: %d' % feature, split_value, weighted_error)
-
                 if weighted_error < min_weighted_error:
-                    min_weighted_error = weighted_error
+                    min_weighted_error = weighted_error.item(0)
                     best_stump['feature_index'] = feature_index
                     best_stump['split_value'] = split_value
                     best_prediction = prediction.copy()

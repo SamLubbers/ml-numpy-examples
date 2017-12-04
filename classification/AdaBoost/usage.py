@@ -12,3 +12,8 @@ dataset = pd.DataFrame(raw_data)
 # create numpy.ndarray of features and target variable
 X = dataset.iloc[:, :-1].values
 y = dataset.iloc[:, -1:].values
+
+from decision_stump import find_best_stump
+import numpy as np
+weights = np.mat(np.ones((len(y), 1))/5)
+best_stump, best_prediction, min_error = find_best_stump(X, y, weights))

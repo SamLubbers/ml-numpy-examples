@@ -20,3 +20,11 @@ best_stump, best_prediction, min_error = find_best_stump(X, y, weights)
 
 from adaboost import adaboost_train_ds
 stumps = adaboost_train_ds(X, y)
+
+# classify instance using adaboost
+from adaboost import adaboost_classify
+predicted_label = adaboost_classify(X, y, np.array([[1.0, 2.2]]))
+
+# classify multiple instances using adaboost
+test_set = np.array([[1.0, 2.2], [0.9, 0.9], [1.2, 1.5]])
+test_set_predictions = adaboost_classify(X, y, test_set)

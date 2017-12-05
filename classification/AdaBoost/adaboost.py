@@ -32,7 +32,7 @@ def adaboost_train_ds(data, labels, iterations=20):
 
     return all_stumps
 
-def adaboost_classify(data, labels, new_instances):
+def adaboost_classify(data, labels, new_instances, iterations=20):
     """classifies a new instance using adaboost with multiple decision stumps
 
     :param data: numpy.ndarray (m x n) of training set data
@@ -40,7 +40,7 @@ def adaboost_classify(data, labels, new_instances):
     :param new_instance: numpy.ndarray (len(new_instaces) x n) of the new instance(s) we want to classify
     :return: predicted class of the new instance (-1, 1)
     """
-    stumps = adaboost_train_ds(data, labels)
+    stumps = adaboost_train_ds(data, labels, iterations=iterations)
     num_new_instances = new_instances.shape[0]
     aggregate_prediction = np.mat(np.zeros((num_new_instances,1)))
     for stump in stumps:

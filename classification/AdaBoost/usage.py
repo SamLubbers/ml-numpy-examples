@@ -16,4 +16,7 @@ y = dataset.iloc[:, -1:].values
 from decision_stump import find_best_stump
 import numpy as np
 weights = np.mat(np.ones((len(y), 1))/5)
-best_stump, best_prediction, min_error = find_best_stump(X, y, weights))
+best_stump, best_prediction, min_error = find_best_stump(X, y, weights)
+
+from adaboost import adaboost_train_ds
+stumps = adaboost_train_ds(X, y)

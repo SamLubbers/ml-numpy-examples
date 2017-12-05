@@ -55,6 +55,7 @@ def find_best_stump(data, labels, instance_weights):
                     min_weighted_error = weighted_error.item(0)
                     best_stump['feature_index'] = feature_index
                     best_stump['split_value'] = split_value
+                    best_stump['class_assignment'] = class_assignment
                     best_prediction = prediction.copy()
 
     return best_stump, best_prediction, min_weighted_error

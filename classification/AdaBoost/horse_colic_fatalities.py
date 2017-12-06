@@ -13,11 +13,13 @@ y_test = dataset_test.iloc[:, -1:].values
 
 # making predictions on the test set
 from adaboost import adaboost_classify
+import numpy as np
 iterations = 50
-test_set_predictions = adaboost_classify(X_train, y_train, X_test, iterations)
+y_test_predictions_aggregate = adaboost_classify(X_train, y_train, X_test, iterations)
+y_test_predictions = np.sign(y_test_predictions_aggregate)
 
 # number of incorrect predictions
-incorrect_predictions = sum(test_set_predictions != y_test)
+incorrect_predictions = sum(y_test_predictions != y_test)
 num_test_instances = len(y_test)
 print('adaboost made %d/%d incorrect predictions' % 
      (incorrect_predictions.item(0), num_test_instances))

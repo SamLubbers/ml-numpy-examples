@@ -50,4 +50,4 @@ def adaboost_classify(data, labels, new_instances, iterations=20):
 
         aggregate_prediction += stump['alpha'] * prediction
 
-    return np.sign(aggregate_prediction)
+    return aggregate_prediction

@@ -6,6 +6,8 @@ y_test = y_test.reshape(len(y_test))
 false_positive_step = 1 / np.sum(np.array((y_test == -1)))
 true_positive_step = 1 / np.sum(np.array((y_test == 1)))
 
+auc_y_sum = 0.0 # sum of y values at each false positive step, used to calculate area under curve
+
 # sort instances from highest prediction threshold to lowest
 prediction_indices = np.array(-(y_test_predictions_aggregate.T)).argsort()
 
@@ -23,6 +25,7 @@ for index in prediction_indices.tolist()[0]:
     elif y_test[index] == -1:
         false_positive_rate_increase = false_positive_step
         true_positive_rate_increase = 0.0
+        auc_y_sum += current[1]
         
     plt.plot([current[0], current[0] + false_positive_rate_increase],
              [current[1], current[1] + true_positive_rate_increase],
@@ -35,5 +38,9 @@ plt.plot([0, 1], [0, 1], 'b--') # roc curve for random classification
 plt.xlabel('false positive rate')
 plt.ylabel('true positive rate')
 plt.axis([0, 1, 0, 1])
-plt.show()
 
+# calculate auc
+auc = auc_y_sum * false_positive_step
+print('the area under the curve is: %f' % auc)
+
+plt.show()

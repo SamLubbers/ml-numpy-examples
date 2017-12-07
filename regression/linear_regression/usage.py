@@ -22,4 +22,4 @@ y_hat = predict_value(X, y, X_sorted)
 
 # local weighted linear regression on our training data
 from linear_regression import lwlr_test
-y_hat_lwlr = lwlr_test(X_sorted, X, y, k=1.0)
+y_hat_lwlr = lwlr_test(X_sorted, X, y, k=0.01)

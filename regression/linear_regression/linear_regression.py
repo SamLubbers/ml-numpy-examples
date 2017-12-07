@@ -69,3 +69,21 @@ def lwlr(local_point, data, target_values,k=1.0):
     weights_local_regression = xTx.I * (data_matrix.T * (weights * target_values_matrix))
     prediction = local_point * weights_local_regression
     return prediction
+
+def lwlr_test(test_set, data, target_values,k=1.0):
+    """locally weighted linear regression applied on the complete test set
+
+    :type local_point: numpy.ndarray ((len(test_set) x n)
+    :param local_point: test set on which we want to compute the locally weighted linear regression
+    :type data: numpy.ndarray (m x n)
+    :param data: training set input features data
+    :type target_values: numpy.ndarray (m x 1)
+    :param target_values: continuous target values associated to each instance in the training data
+    :param k: value between 0 and 1 that determines how much to weight nearby points
+    :return: predicted values obtained from applying lwlr on each instance of the test set
+    """
+    num_instances_test_set = test_set.shape[0]
+    test_set_predictions = np.zeros(num_instances_test_set)
+    for index, instance in enumerate(test_set):
+        test_set_predictions[index] = lwlr(instance, data, target_values, k)
+    return test_set_predictions

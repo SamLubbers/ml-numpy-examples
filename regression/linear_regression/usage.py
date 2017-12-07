@@ -11,3 +11,7 @@ y = dataset.iloc[:, -1:].values
 from linear_regression import calculate_regression_weights
 
 weights = calculate_regression_weights(X, y)
+
+from linear_regression import predict_value
+
+y_hat = predict_value(X, y, X)

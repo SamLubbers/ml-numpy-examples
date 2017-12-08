@@ -21,19 +21,19 @@ def calculate_regression_weights(data, target_values):
     weights = xTx.I * (data_matrix.T * target_values_matrix)
     return weights
 
-def predict_value(data, labels, new_instances):
-    """predicts a numeric value using the regression equation
+def predict_values(test_set, data, labels):
+    """predicts the values a test set using the linear regression
 
+    :type test_set: numpy.ndarray ((len(test_set) x n)
+    :param test_set: test set on which we want to compute the locally weighted linear regression
     :type data: numpy.ndarray (m x n)
     :param data: training set input features data
     :type target_values: numpy.ndarray (m x 1)
     :param target_values: continuous target values associated to each instance in the training data
-    :type new_instances: numpy.ndarray (len(new_instaces) x n)
-    :param new_instances: new instance(s) we want to predict the value of
     :return: predicted value for each new instance
     """
     weights = calculate_regression_weights(data, labels)
-    new_instances_matrix = np.mat(new_instances)
+    new_instances_matrix = np.mat(test_set)
 
     predicted_values = new_instances_matrix * weights
     return predicted_values
@@ -73,8 +73,8 @@ def lwlr(local_point, data, target_values,k=1.0):
 def lwlr_test(test_set, data, target_values,k=1.0):
     """locally weighted linear regression applied on the complete test set
 
-    :type local_point: numpy.ndarray ((len(test_set) x n)
-    :param local_point: test set on which we want to compute the locally weighted linear regression
+    :type test_set: numpy.ndarray ((len(test_set) x n)
+    :param test_set: test set on which we want to compute the locally weighted linear regression
     :type data: numpy.ndarray (m x n)
     :param data: training set input features data
     :type target_values: numpy.ndarray (m x 1)

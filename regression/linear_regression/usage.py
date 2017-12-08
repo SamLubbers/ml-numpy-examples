@@ -14,11 +14,11 @@ from linear_regression import calculate_regression_weights
 weights = calculate_regression_weights(X, y)
 
 # linear regression on our training data
-from linear_regression import predict_value
+from linear_regression import predict_values
 import numpy as np
 
 X_sorted = np.sort(X.copy(), 0)
-y_hat = predict_value(X, y, X_sorted)
+y_hat = predict_values(X_sorted, X, y)
 
 # local weighted linear regression on our training data
 from linear_regression import lwlr_test

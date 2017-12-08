@@ -107,3 +107,32 @@ def ridge_regression_weights(data_matrix, target_values_matrix, lam=0.2):
 
     weights = xTx_biased.I * (data_matrix.T * target_values_matrix)
     return weights
+
+def ridge_weights(data, target_values):
+    """calculates the regression weights of the input data according to different lambda values
+
+    :type data: numpy.ndarray (m x n)
+    :param data: training set input features data
+    :type target_values: numpy.ndarray (m x 1)
+    :param target_values: continuous target values associated to each instance in the training data
+    :return: matrix of regression weights obtained with different alpha values
+    """
+    data_matrix = np.mat(data)
+    target_matrix = np.mat(target_values)
+
+    # normalize data and target values
+    target_mean = np.mean(target_matrix, 0)
+    target_matrix = target_matrix - target_mean
+    data_mean = np.mean(data_matrix, 0)
+    data_variance = np.var(data_matrix, 0)
+    data_matrix = (data_matrix - target_mean) / data_variance
+
+    # calculate weights for different lambdas
+    iterations = 30
+    num_features = data_matrix.shape[1]
+    weights_matrix = np.zeros((iterations, num_features))
+    for i in range(iterations):
+        lam = np.exp(i - 10)
+        weights = ridge_regression_weights(data_matrix, target_matrix, lam)
+        weights_matrix[i, :] = weights.T
+    return weights_matrix

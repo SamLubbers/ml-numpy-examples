@@ -87,3 +87,23 @@ def lwlr_test(test_set, data, target_values,k=1.0):
     for index, instance in enumerate(test_set):
         test_set_predictions[index] = lwlr(instance, data, target_values, k)
     return test_set_predictions
+
+def ridge_regression_weights(data_matrix, target_values_matrix, lam=0.2):
+    """alculates the linear regression weights for the input data using ridge regression
+
+    :type data_matrix: numpy.matrix (m x n)
+    :param data_matrix: training set input features data
+    :type target_values_matrix: numpy.matrix (m x 1)
+    :param target_values_matrix: continuous target values associated to each instance in the training data
+    :param lam: user defined value that determines how our ridge regression will perform
+    :return: weights associated to each variable
+    """
+    xTx = data_matrix.T * data_matrix
+    m, n = data_matrix.shape
+    xTx_biased = xTx + np.mat(np.eye(n)) * lam
+    if np.linalg.det(xTx_biased) == 0:
+        print('matrix is singular, cannot do inverse')
+        return
+
+    weights = xTx_biased.I * (data_matrix.T * target_values_matrix)
+    return weights

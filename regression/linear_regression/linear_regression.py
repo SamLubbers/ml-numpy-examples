@@ -108,7 +108,7 @@ def ridge_regression_weights(data_matrix, target_values_matrix, lam=0.2):
     weights = xTx_biased.I * (data_matrix.T * target_values_matrix)
     return weights
 
-def ridge_weights(data, target_values):
+def multiple_ridge_weights(data, target_values):
     """calculates the regression weights of the input data according to different lambda values
 
     :type data: numpy.ndarray (m x n)
@@ -125,7 +125,7 @@ def ridge_weights(data, target_values):
     target_matrix = target_matrix - target_mean
     data_mean = np.mean(data_matrix, 0)
     data_variance = np.var(data_matrix, 0)
-    data_matrix = (data_matrix - target_mean) / data_variance
+    data_matrix = (data_matrix - data_mean) / data_variance
 
     # calculate weights for different lambdas
     iterations = 30

@@ -14,6 +14,11 @@ def binary_split(dataset, feature, value):
     subset_right = dataset.loc[dataset[feature] > value]
     return subset_left, subset_right
 
+
+def calculate_leaf_value(dataset):
+    """calculates the average value of the target variable of the given dataset"""
+    return np.mean(dataset.iloc[:, -1].values)
+
 # TODO function that decides best split feature
 
 # TODO function that builds tree

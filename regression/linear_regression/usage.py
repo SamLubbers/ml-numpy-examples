@@ -23,3 +23,12 @@ y_hat = predict_values(X_sorted, X, y)
 # local weighted linear regression on our training data
 from linear_regression import lwlr_test
 y_hat_lwlr = lwlr_test(X_sorted, X, y, k=0.01)
+
+# ridge regression
+dataset_abalone = pd.read_csv('abalone.txt', header=None, delimiter='\t')
+
+X_abalone = dataset_abalone.iloc[:, :-1].values
+y_abalone = dataset_abalone.iloc[:, -1:].values
+
+from linear_regression import multiple_ridge_weights
+abalone_multiple_weights = multiple_ridge_weights(X_abalone, y_abalone)

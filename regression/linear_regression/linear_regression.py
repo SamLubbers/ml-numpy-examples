@@ -136,3 +136,49 @@ def multiple_ridge_weights(data, target_values):
         weights = ridge_regression_weights(data_matrix, target_matrix, lam)
         weights_matrix[i, :] = weights.T
     return weights_matrix
+
+def multiple_stagewise_weights(data, target_values, step_size=0.01, iterations=100):
+    """calculate regression weights using stagewise regression
+
+    :type data: numpy.ndarray (m x n)
+    :param data: training set input features data
+    :type target_values: numpy.ndarray (m x 1)
+    :param target_values: continuous target values associated to each instance in the training data
+    :param step_size: amount by which the weights are updated on each iteration
+    :param iterations: number of iterations of the stagewise algorithm
+    :return: matrix of weights at each iteration
+    """
+    data_matrix = np.mat(data)
+    target_matrix = np.mat(target_values)
+
+    # regularize data and target values
+    data_mean = np.mean(data_matrix, 0)
+    data_variance = np.var(data_matrix, 0)
+    data_matrix = (data_matrix - data_mean) / data_variance
+    target_mean = np.mean(target_matrix, 0)
+    target_matrix = target_matrix - target_mean
+
+    # initialize weights
+    num_features = data_matrix.shape[1]
+    weights = np.zeros((num_features, 1))
+    best_weights = np.zeros((num_features, 1))
+    multiple_weights_matrix = np.zeros((iterations, num_features))
+
+    for i in range(iterations):
+        min_error = np.inf
+        for n in range(num_features):
+            for sign in (-1, 1):
+                # update weights of a given feature
+                weights_test = weights.copy()
+                weights_test[n] += step_size * sign
+                # calculate error
+                target_test = data_matrix * weights_test
+                error = ((target_matrix.A - target_test.A)**2).sum()
+                # update weight and min error
+                if error < min_error:
+                    min_error = error
+                    best_weights = weights_test
+        weights = best_weights.copy()
+        multiple_weights_matrix[i,:] = weights.T
+
+    return multiple_weights_matrix

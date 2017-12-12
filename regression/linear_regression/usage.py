@@ -31,4 +31,10 @@ X_abalone = dataset_abalone.iloc[:, :-1].values
 y_abalone = dataset_abalone.iloc[:, -1:].values
 
 from linear_regression import multiple_ridge_weights
-abalone_multiple_weights = multiple_ridge_weights(X_abalone, y_abalone)
+abalone_multiple_ridge_weights = multiple_ridge_weights(X_abalone, y_abalone)
+
+from linear_regression import multiple_stagewise_weights
+abalone_multiple_stagewise_weights = multiple_stagewise_weights(X_abalone,
+                                                                y_abalone,
+                                                                step_size=0.005,
+                                                                iterations=1000)

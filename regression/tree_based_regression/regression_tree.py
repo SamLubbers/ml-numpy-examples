@@ -25,7 +25,47 @@ def calculate_error(dataset):
     num_instances = dataset.values.shape[0]
     total_square_error = mean_square_error * num_instances
     return total_square_error
-    
-# TODO function that decides best split feature
+
+def choose_best_split(dataset, min_error_delta=1, min_instances=4):
+    """finds the feature and value that splits the given dataset with the lowest error
+
+    :type dataset: pandas.DataFrame
+    :param dataset: data on which we want to find the optimal split feature and value
+    :param min_error_delta: minimum decrease in error required for it to be a good split.
+                            If decrease in error is lower than this value a leaf node is returned
+    :param min_instances: minimum number of instances each subset must have.
+                          If a subset has fewer number of instances a leaf node is returned
+    :return: feature and value by which to make the optimal split
+    """
+    # return leaf node if all values of the target variable are equal
+    if len(set(dataset.iloc[:, -1].values.tolist())) == 1:
+        return None, calculate_leaf_value(dataset)
+
+    # find out best feature and value by which to make the split
+    error_before_split = calculate_error(dataset)
+    best_error_after_split = np.inf
+    best_feature = dataset.columns[0]
+    best_value = 0
+    for feature in dataset.columns:
+        for split_value in set(dataset.loc[:, feature].values):
+            subset_left, subset_right = binary_split(dataset, feature, split_value)
+            # ignore split if a subset does not have enough features
+            if (subset_left.shape[0] < min_instances) or (subset_right.shape[0] < min_instances): continue
+            error_after_split = calculate_error(subset_left) + calculate_error(subset_right)
+            if error_after_split < best_error_after_split:
+                best_error_after_split = error_after_split
+                best_feature = feature
+                best_value = split_value
+
+    # if error decrease is not enough return leaf node
+    if (error_before_split - best_error_after_split) < min_error_delta:
+        return None, calculate_leaf_value(dataset)
+
+    # if resulting subsets are smaller than threshold return leaf node
+    subset_left, subset_right = binary_split(dataset, feature, split_value)
+    if (subset_left.shape[0] < min_instances) or (subset_right.shape[0] < min_instances):
+        return None, calculate_leaf_value(dataset)
+
+    return best_feature, best_value
 
 # TODO function that builds tree

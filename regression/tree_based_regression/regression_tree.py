@@ -45,7 +45,7 @@ def choose_best_split(dataset, min_error_delta=1, min_instances=4):
     best_error_after_split = np.inf
     best_feature = dataset.columns[0]
     best_value = 0
-    for feature in dataset.columns:
+    for feature in dataset.columns[:-1]: # loop only over independent variables
         for split_value in set(dataset.loc[:, feature].values):
             subset_left, subset_right = binary_split(dataset, feature, split_value)
             # ignore split if a subset does not have enough features

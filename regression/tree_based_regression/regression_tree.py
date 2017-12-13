@@ -102,3 +102,33 @@ def tree_mean_value(my_tree):
     if is_tree(my_tree['left']): my_tree['left'] = tree_mean_value(my_tree['left'])
     if is_tree(my_tree['right']): my_tree['right'] = tree_mean_value(my_tree['right'])
     return (my_tree['left'] + my_tree['right']) / 2
+
+def prune(my_tree, test_data):
+    """postpruning applied recursively to my_tree
+
+    prune is called recursively on each subnode that is a tree
+    when both subnodes are leaf nodes it merges them if the merged nodes have a lower error rate on the test_data
+    :type my_tree: dict
+    :param my_tree: regression tree
+    :type test_data: pandas.DataFrame
+    :param test_data: test data used to decide whether 2 leave nodes should be merged
+    :return: pruned tree
+    """
+    if test_data.shape[0] == 0: return tree_mean_value(my_tree) # collapse tree if test data is empty
+
+    test_subset_left, test_subset_right = binary_split(test_data, my_tree['split_feature'], my_tree['split_value'])
+
+    if is_tree(my_tree['left']): my_tree['left'] = prune(my_tree['left'], test_subset_left)
+    if is_tree(my_tree['right']): my_tree['right'] = prune(my_tree['right'], test_subset_right)
+    # if both nodes are leaf nodes calculate errors and decide whether to merge leafs
+    if not is_tree(my_tree['left']) and not is_tree(my_tree['right']):
+        error_no_merge = np.sum(np.power(test_subset_left.iloc[:, -1] - my_tree['left'], 2)) + \
+                         np.sum(np.power(test_subset_right.iloc[:, -1] - my_tree['right'], 2))
+
+        tree_mean = tree_mean_value(my_tree)
+        error_merge = np.sum(np.power(test_data.iloc[:, -1] - tree_mean, 2))
+        # merge leaf nodes if they give a better prediction
+        if error_merge < error_no_merge:
+            print('merging leafs')
+            return tree_mean
+    return my_tree

@@ -87,3 +87,9 @@ def create_tree(dataset, min_error_delta=1, min_instances=4):
     my_tree['subset_left'] = create_tree(subset_left, min_error_delta, min_instances)
     my_tree['subset_right'] = create_tree(subset_right, min_error_delta, min_instances)
     return my_tree
+
+def is_tree(obj):
+    """assesses weather the current object is a tree or leaf node"""
+    if type(obj) is dict:
+        return True
+    return False

@@ -10,10 +10,9 @@ def binary_split(dataset, feature, value):
     :param value: value of the input feature used as threshold for the split
     :return: 2 subsets of the dataset as pandas.DataFrame
     """
-    subset_left = dataset.loc[dataset[feature] < value]
+    subset_left = dataset.loc[dataset[feature] <= value]
     subset_right = dataset.loc[dataset[feature] > value]
     return subset_left, subset_right
-
 
 def calculate_leaf_value(dataset):
     """calculates the average value of the target variable of the given dataset"""

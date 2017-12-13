@@ -129,6 +129,5 @@ def prune(my_tree, test_data):
         error_merge = np.sum(np.power(test_data.iloc[:, -1] - tree_mean, 2))
         # merge leaf nodes if they give a better prediction
         if error_merge < error_no_merge:
-            print('merging leafs')
             return tree_mean
     return my_tree

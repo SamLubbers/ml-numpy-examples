@@ -9,3 +9,6 @@ weights = leaf_regression_weights(dataset)
 
 from model_tree import model_error
 err = model_error(dataset)
+
+from model_tree import choose_best_split
+best_split = choose_best_split(dataset)

@@ -83,3 +83,24 @@ def choose_best_split(dataset, min_error_delta=1, min_instances=4):
         return None, leaf_regression_weights(dataset)
 
     return best_feature, best_value
+
+def create_model_tree(dataset, min_error_delta=1, min_instances=4):
+    """create a model tree for the given dataset
+
+    :type dataset: pandas.DataFrame
+    :param dataset: data on which we want to create the decision tree
+    :param min_error_delta: minimum decrease in error required for it to be a good split.
+    :param min_instances: minimum number of instances each subset must have.
+    :return: dictionary representing the regression tree
+    """
+    split_feature, split_value = choose_best_split(dataset, min_error_delta, min_instances)
+    if split_feature is None:
+        return split_value
+    subset_left, subset_right = binary_split(dataset, split_feature, split_value)
+
+    my_tree = {}
+    my_tree['split_feature'] = split_feature
+    my_tree['split_value'] = split_value
+    my_tree['left'] = create_model_tree(subset_left, min_error_delta, min_instances)
+    my_tree['right'] = create_model_tree(subset_right, min_error_delta, min_instances)
+    return my_tree

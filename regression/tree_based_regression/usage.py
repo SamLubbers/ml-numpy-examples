@@ -13,5 +13,14 @@ left_split, right_split = binary_split(dataset, 'x', 0.5)
 from regression_tree import choose_best_split
 feature, value = choose_best_split(dataset)
 
+# creating regression tree
 from regression_tree import create_tree
 my_tree = create_tree(dataset)
+
+# check if our subnode is a tree
+from regression_tree import is_tree
+it_is_tree = is_tree(my_tree['left'])
+
+# mean value of tree
+from regression_tree import tree_mean_value
+tree_mean = tree_mean_value(my_tree)

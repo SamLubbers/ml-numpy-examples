@@ -84,8 +84,8 @@ def create_tree(dataset, min_error_delta=1, min_instances=4):
     my_tree = {}
     my_tree['split_feature'] = split_feature
     my_tree['split_value'] = split_value
-    my_tree['subset_left'] = create_tree(subset_left, min_error_delta, min_instances)
-    my_tree['subset_right'] = create_tree(subset_right, min_error_delta, min_instances)
+    my_tree['left'] = create_tree(subset_left, min_error_delta, min_instances)
+    my_tree['right'] = create_tree(subset_right, min_error_delta, min_instances)
     return my_tree
 
 def is_tree(obj):
@@ -93,3 +93,12 @@ def is_tree(obj):
     if type(obj) is dict:
         return True
     return False
+
+def tree_mean_value(my_tree):
+    """calculates the mean value of a tree
+    :type my_tree: dict
+    """
+    my_tree = my_tree.copy()
+    if is_tree(my_tree['left']): my_tree['left'] = tree_mean_value(my_tree['left'])
+    if is_tree(my_tree['right']): my_tree['right'] = tree_mean_value(my_tree['right'])
+    return (my_tree['left'] + my_tree['right']) / 2

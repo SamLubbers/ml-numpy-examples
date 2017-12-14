@@ -80,14 +80,15 @@ def bisecting_kmeans(dataset, k, calculate_distance=euclidean_distance):
     while len(centroids) < k:
         lowest_error = np.inf
         for cluster, _ in enumerate(centroids):
-            # calculate error of cluster before split
-            non_split_error = np.sum(cluster_assignment[np.nonzero(cluster_assignment[:, 0].A == cluster)[0], 1])
-            # divide current cluster in 2 and calculate error
+            # calculate error of the instances not corresponding to this cluster
+            error_other_clusters = np.sum(cluster_assignment[np.nonzero(cluster_assignment[:, 0].A != cluster)[0], 1])
+            # divide current cluster in 2 and calculate error for subclusters
             instances_in_cluster = dataset[np.nonzero(cluster_assignment[:, 0].A == cluster)[0]]
             new_centroids, new_clusters = kmeans(instances_in_cluster, 2, calculate_distance=euclidean_distance)
-            split_error = np.sum(new_clusters[:, 1])
-            if non_split_error + split_error < lowest_error:
-                lowest_error = non_split_error + split_error
+            error_subclusters = np.sum(new_clusters[:, 1])
+            total_error = error_other_clusters + error_subclusters
+            if total_error < lowest_error:
+                lowest_error = total_error
                 best_cluster = cluster
                 best_new_centroids = new_centroids.copy()
                 best_new_clusters = new_clusters.copy()

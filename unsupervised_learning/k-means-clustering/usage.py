@@ -20,4 +20,4 @@ centroids, cluster_assignments = kmeans(dataset, k=4)
 dataset_2 = pd.read_csv('testSet2.txt', delimiter='\t', header=None).values
 
 from kmeans import bisecting_kmeans
-centroids_2, cluster_assignments_2 = bisecting_kmeans(dataset, k=3)
+centroids_2, cluster_assignments_2 = bisecting_kmeans(dataset_2, k=3)

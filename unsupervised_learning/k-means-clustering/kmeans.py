@@ -1,7 +1,7 @@
 """kmeans clustering algorithm"""
 import numpy as np
 
-def random_centroid(dataset, k):
+def random_centroids(dataset, k):
     """initializes random values for the centroids within the dataset boundaries
 
     :type dataset: numpy.ndarray (mxn)

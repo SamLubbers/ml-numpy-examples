@@ -17,3 +17,7 @@ def random_centroid(dataset, k):
         feature_range = feature_max - feature_min
         centroids[:, feature_index] = feature_min + feature_range * np.random.rand(k, 1)
     return centroids
+
+def euclidean_distance(vec_a, vec_b):
+    """calculates the euclidean distance between 2 vectors"""
+    return np.sqrt(np.sum(np.power(vec_a - vec_b, 2)))

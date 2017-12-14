@@ -58,3 +58,49 @@ def kmeans(dataset, k, initialize_centroids=random_centroids, calculate_distance
             centroids[cluster, :] = np.mean(cluster_instances, axis=0)
 
     return centroids, cluster_assignment
+
+def bisecting_kmeans(dataset, k, calculate_distance=euclidean_distance):
+    """clustering of instances in dataset into k clusters using bisecting k means
+
+    :type dataset: numpy.ndarray (mxn)
+    :param dataset: data on which we will perform the clustering
+    :param k: number of clusters
+    :param calculate_distance: function used to calculate distance between centroids and points
+    :return: matrix of cluster assigned to each instance along with its associated error
+    """
+    num_instances = dataset.shape[0]
+    cluster_assignment = np.mat(np.zeros((num_instances, 2)))
+    # start by assigning all instances to one cluster
+    initial_centroid = np.mat(np.mean(dataset, axis=0))
+    for i, instance in enumerate(dataset):
+        error = calculate_distance(initial_centroid, instance) ** 2
+        cluster_assignment[i, 1] = error
+
+    centroids = [initial_centroid]
+    while len(centroids) < k:
+        lowest_error = np.inf
+        for cluster, _ in enumerate(centroids):
+            # calculate error of cluster before split
+            non_split_error = np.sum(cluster_assignment[np.nonzero(cluster_assignment[:, 0].A == cluster)[0], 1])
+            # divide current cluster in 2 and calculate error
+            instances_in_cluster = dataset[np.nonzero(cluster_assignment[:, 0].A == cluster)[0]]
+            new_centroids, new_clusters = kmeans(instances_in_cluster, 2, calculate_distance=euclidean_distance)
+            split_error = np.sum(new_clusters[:, 1])
+            if non_split_error + split_error < lowest_error:
+                lowest_error = non_split_error + split_error
+                best_cluster = cluster
+                best_new_centroids = new_centroids.copy()
+                best_new_clusters = new_clusters.copy()
+
+        # update cluster assignment
+        best_new_clusters[np.nonzero(best_new_clusters[:, 0].A == 0)[0], 0] = best_cluster
+        best_new_clusters[np.nonzero(best_new_clusters[:, 0].A == 1)[0], 0] = len(centroids)
+        cluster_assignment[np.nonzero(cluster_assignment[:, 0].A == best_cluster)[0], :] = best_new_clusters
+
+        # update centroids
+        centroids[best_cluster] = best_new_centroids[0, :]
+        centroids.append(best_new_centroids[1, :])
+
+    # convert list of centroids from list to matrix
+    centroids = np.mat(np.asarray(centroids).reshape(len(centroids), centroids[0].shape[1]))
+    return centroids, cluster_assignment

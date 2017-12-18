@@ -67,3 +67,24 @@ def apriori(dataset, min_support=0.5):
     # eliminate nested itemsets
     all_itemsets = [itemset for m in all_itemsets for itemset in m]
     return all_itemsets, support
+
+def itemsets_associations(itemeset, consequents, itemsets_support, minimum_confidence=0.7):
+    """finds all associations of items in the itemset with consequents that have meet a minimum confidence
+
+    :param itemeset: set of items from which the associations will be created
+    :param consequents: possible consequents in the assocation
+    :param itemsets_support: support of all itemsets
+    :param minimum_confidence: minimum confidence for an association to be relevant
+    :return: tuple containing the association antecedent, consequent and confidence
+    """
+    associations = []
+    for consequent in consequents:
+        antecedent = itemeset - consequent
+        confidence = itemsets_support[itemeset] / itemsets_support[antecedent]
+        if confidence >= minimum_confidence:
+            association = {'antecedent': antecedent,
+                           'consequent': consequent,
+                           'confidence': confidence}
+            associations.append(association)
+
+    return associations

@@ -64,5 +64,6 @@ def apriori(dataset, min_support=0.5):
         support.update(itemsets_support)
         all_itemsets.append(itemsets)
 
-    all_itemsets = all_itemsets[:-1] # delete last item which is an empty list
+    # eliminate nested itemsets
+    all_itemsets = [itemset for m in all_itemsets for itemset in m]
     return all_itemsets, support

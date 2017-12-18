@@ -1,5 +1,4 @@
 """apriori algorithm for association analysis"""
-import numpy as np
 
 def create_initial_itemsets(dataset):
     """creates all possible candidate itemsets of size 1 from the different transactions in our dataset
@@ -18,7 +17,7 @@ def filter_itemsets(dataset, itemsets, min_support):
     itemset_count = {}
     dataset = list(map(set, dataset)) # convert each transaction to set to eliminate duplicates
     for transaction in dataset:
-            for itemset in itemsets:
+        for itemset in itemsets:
             if itemset.issubset(transaction):
                 itemset_count[itemset] = itemset_count.setdefault(itemset, 0) + 1
 
@@ -31,3 +30,18 @@ def filter_itemsets(dataset, itemsets, min_support):
             filtered_itemsets.append(itemset)
         itemests_support[itemset] = support
     return filtered_itemsets, itemests_support
+
+def itemset_combinations(itemsets):
+    """creates combinations of itemsets of size: len(itemsets) +1
+
+    :param itemsets: list of itemsets of same size (same number items in each itemset)
+    """
+    new_itemsets = []
+    new_itemsets_length = len(itemsets[0]) + 1
+    for a in itemsets:
+        for b in itemsets:
+            new_itemset = a | b
+            if (a != b) and (len(new_itemset) == new_itemsets_length) and (new_itemset not in new_itemsets):
+                new_itemsets.append(new_itemset)
+
+    return new_itemsets

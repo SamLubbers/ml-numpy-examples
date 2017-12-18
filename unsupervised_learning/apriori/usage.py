@@ -17,8 +17,8 @@ from apriori import apriori
 most_frequent_itemsets, support = apriori(dataset)
 
 from apriori import itemsets_associations
-example_itemset = most_frequent_itemsets[7]
+example_itemset = most_frequent_itemsets[8]
 example_consequents = [frozenset([item]) for item in example_itemset]
-example_association = itemsets_associations(example_itemset,
+example_associations = itemsets_associations(example_itemset,
                                            example_consequents,
                                            support)

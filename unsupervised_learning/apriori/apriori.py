@@ -69,7 +69,7 @@ def apriori(dataset, min_support=0.5):
     return all_itemsets, support
 
 def itemsets_associations(itemeset, consequents, itemsets_support, minimum_confidence=0.7):
-    """finds all associations of items in the itemset with consequents that have meet a minimum confidence
+    """finds all associations of items in the itemset with consequents, that meet a minimum confidence
 
     :param itemeset: set of items from which the associations will be created
     :param consequents: possible consequents in the assocation
@@ -85,6 +85,14 @@ def itemsets_associations(itemeset, consequents, itemsets_support, minimum_confi
             association = {'antecedent': antecedent,
                            'consequent': consequent,
                            'confidence': confidence}
+            associations.append(association)
+
+    # recursively create associations for consequents created as combinations of current consequents
+    itemset_length = len(itemeset)
+    consequent_length = len(consequents[0])
+    if (itemset_length > 2) and (itemset_length > consequent_length + 1):
+        new_consequents = itemset_combinations(consequents)
+        for association in itemsets_associations(itemeset, new_consequents, itemsets_support, minimum_confidence):
             associations.append(association)
 
     return associations

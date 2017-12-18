@@ -75,24 +75,42 @@ def itemset_rules(itemeset, consequents, itemsets_support, minimum_confidence=0.
     :param consequents: possible consequents in the assocation rule
     :param itemsets_support: support of all itemsets
     :param minimum_confidence: minimum confidence for an association rule to be relevant
-    :return: list of associations, each being a dict containing the association antecedent, consequent and confidence
+    :return: list of rules, each being a dict containing the rule antecedent, consequent and confidence
     """
-    associations = []
+    rules = []
     for consequent in consequents:
         antecedent = itemeset - consequent
         confidence = itemsets_support[itemeset] / itemsets_support[antecedent]
         if confidence >= minimum_confidence:
-            association = {'antecedent': antecedent,
+            rule = {'antecedent': antecedent,
                            'consequent': consequent,
                            'confidence': confidence}
-            associations.append(association)
+            rules.append(rule)
 
     # recursively create associations for consequents created as combinations of current consequents
     itemset_length = len(itemeset)
     consequent_length = len(consequents[0])
     if (itemset_length > 2) and (itemset_length > consequent_length + 1):
         new_consequents = itemset_combinations(consequents)
-        for association in itemset_rules(itemeset, new_consequents, itemsets_support, minimum_confidence):
-            associations.append(association)
+        for rule in itemset_rules(itemeset, new_consequents, itemsets_support, minimum_confidence):
+            rules.append(rule)
 
-    return associations
+    return rules
+
+def all_itemsets_rules(itemsets, itemsets_support, minimum_confidence=0.7):
+    """finds relevant associations rules for each itemset in itemsets
+
+    :param itemsets: set of itemsets from which rules will be created
+    :param itemsets_support: support of all itemsets
+    :param minimum_confidence: minimum confidence for an association to be relevant
+    :return: all association rules created from the given itemset
+    """
+    rules = []
+    for itemset in itemsets:
+        if len(itemset) == 1: continue # no rules can be created for itemsets of size 1
+
+        itemset_consequents = [frozenset([item]) for item in itemset]
+        for rule in itemset_rules(itemset, itemset_consequents, itemsets_support, minimum_confidence):
+            rules.append(rule)
+
+    return rules

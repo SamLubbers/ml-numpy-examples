@@ -22,3 +22,6 @@ example_consequents = [frozenset([item]) for item in example_itemset]
 example_associations = itemset_rules(example_itemset,
                                      example_consequents,
                                      support)
+
+from apriori import all_itemsets_rules
+rules = all_itemsets_rules(most_frequent_itemsets, support)

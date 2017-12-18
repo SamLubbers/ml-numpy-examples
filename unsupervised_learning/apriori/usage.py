@@ -12,3 +12,6 @@ filtered_itemsets, itemsets_support = filter_itemsets(dataset, initial_itemsets,
 
 from apriori import itemset_combinations
 new_itemsets = itemset_combinations(filtered_itemsets)
+
+from apriori import apriori
+most_frequent_itemsets, support = apriori(dataset)

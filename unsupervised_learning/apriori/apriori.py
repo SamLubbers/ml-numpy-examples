@@ -45,3 +45,24 @@ def itemset_combinations(itemsets):
                 new_itemsets.append(new_itemset)
 
     return new_itemsets
+
+
+def apriori(dataset, min_support=0.5):
+    """finds the most frequent imtemsets of a dataset using the apriori algorithm
+
+    :param dataset: list of transactions, each transaction being a list with different items
+    :param min_support: minimum support required for an itemset not to be discated
+    :return: list of most frequent itemsets of the dataset of transactions
+    """
+    initial_itemsets = create_initial_itemsets(dataset)
+    itemsets, support = filter_itemsets(dataset, initial_itemsets, min_support=min_support)
+    all_itemsets = [itemsets]
+
+    while itemsets:  # loop until no new itemsets are created
+        new_itemsets = itemset_combinations(itemsets)
+        itemsets, itemsets_support = filter_itemsets(dataset, new_itemsets, min_support=min_support)
+        support.update(itemsets_support)
+        all_itemsets.append(itemsets)
+
+    all_itemsets = all_itemsets[:-1] # delete last item which is an empty list
+    return all_itemsets, support

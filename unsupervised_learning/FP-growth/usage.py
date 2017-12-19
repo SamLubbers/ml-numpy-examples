@@ -27,4 +27,8 @@ headertable = create_header_table(parsed_dataset, 3)
 
 # create fptree from dataset and headertable
 from fpgrowth import create_tree
-tree, header_table = create_tree(parsed_dataset, headertable)
+tree, headertable = create_tree(parsed_dataset, headertable)
+
+# create fptree from dataset and min support
+from fpgrowth import fp_tree
+fptree, header_table = fp_tree(dataset, min_support=3)

@@ -28,6 +28,7 @@ def create_header_table(dataset, min_support):
     """creates the header table, necessary for the creation of the fp-tree
 
     :param dataset: dictionary with frozensets of instances as keys and their frequency as values
+    :param min_support: minimum number of times each item must appear to be kept in the header table
     """
     header_table = {}
     for transaction in dataset:
@@ -48,7 +49,7 @@ def create_tree(dataset, header_table):
 
     :param dataset: dictionary with frozensets of instances as keys and their frequency as values
     :param header_table: dictionary containing the frequency of each item, without node_link to first node of that item
-    :return: FP-tree and header_table, with node_link to first node of that item
+    :return: FP-tree and header_table, with item count and node_link to first node of that item
     """
     # tree main node
     tree = Node('Null set', 1, None)
@@ -115,3 +116,18 @@ def update_node_link(header_table, item_node):
             node = node.node_link
 
         node.node_link = item_node
+
+def fp_tree(dataset, min_support):
+    """creates a complete fp_tree given the raw dataset and minimum support
+
+    :param dataset: dictionary with frozensets of instances as keys and their frequency as values
+    :param min_support: minimum number of times each item must appear to be kept in the header table
+    :return: FP-tree and header table, with item count and node_link to first node of that item
+    """
+    dataset = prepare_input_data(dataset)
+    header_table = create_header_table(dataset, min_support)
+
+    if not header_table: return None, None # header table must not be empty to proceed
+
+    tree, header_table = create_tree(dataset, header_table)
+    return tree, header_table

@@ -6,8 +6,8 @@ node = Node('x', 9, None)
 node.children['y'] = Node('y', 5, None)
 node.children['z'] = Node('z', 2, None)
 
-# print simple tree
-node.display_tree()
+# print tree
+#node.display_tree()
 
 # example dataset of transactions
 dataset = [['r', 'z', 'h', 'j', 'p'],
@@ -33,8 +33,14 @@ tree, headertable = create_tree(parsed_dataset, headertable)
 from fpgrowth import fp_tree
 fptree, header_table = fp_tree(parsed_dataset, min_support=3)
 
+# get the conditional pattern base of item x
 from fpgrowth import conditional_pattern_base
 cpb_x = conditional_pattern_base('x', header_table)
 
+# mine tree given the fptree and hader table to get frequent itemsets
 from fpgrowth import mine_tree
-frequent_itemsets = mine_tree(fptree, header_table, min_support=3)
+freq_itemsets = mine_tree(fptree, header_table, min_support=3)
+
+# find frequent itemsets from the raw dataset and minimum support
+from fpgrowth import find_frequent_itemsets
+frequent_itemsets = find_frequent_itemsets(dataset, min_support=3)

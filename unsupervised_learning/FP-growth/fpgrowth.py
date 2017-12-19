@@ -186,3 +186,16 @@ def mine_tree(fptree, header_table, min_support, prefix=set([])):
                 frequent_itemsets.append(itemset)
 
     return frequent_itemsets
+
+def find_frequent_itemsets(dataset, min_support):
+    """find frequent itemsets from a dataset of transactions by creating an fp-tree and mining that tree
+
+    this function combines all other functions in the fpgrowth module
+    :param dataset: list of transaction of items
+    :param min_support: minimum number of times each item must appear to be relevant to a frequent itemset
+    :return: frequent itemsets from the dataset
+    """
+    dataset = prepare_input_data(dataset)
+    fptree, header_table = fp_tree(dataset, min_support)
+    frequent_itemsets = mine_tree(fptree, header_table, min_support)
+    return frequent_itemsets

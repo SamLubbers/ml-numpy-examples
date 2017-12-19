@@ -7,6 +7,7 @@ class Node(object):
         self.item = item
         self.frequency = frequency
         self.parent = parent_node
+        self.node_link = None
         self.children = {}
 
     def display_tree(self, indent=1):
@@ -38,7 +39,7 @@ def create_header_table(dataset, min_support):
             del header_table[item]
 
     for item in list(header_table.keys()):
-        header_table[item] = {'count': header_table[item], 'pointer': None}
+        header_table[item] = {'count': header_table[item], 'node_link': None}
 
     return header_table
 
@@ -46,8 +47,8 @@ def create_tree(dataset, header_table):
     """creates the FP-tree given a dataset of transaction and a header_table for that dataset
 
     :param dataset: dictionary with frozensets of instances as keys and their frequency as values
-    :param header_table: dictionary containing the frequency of each item, without pointers to nodes
-    :return: FP-tree and header_table, with pointers to nodes
+    :param header_table: dictionary containing the frequency of each item, without node_link to first node of that item
+    :return: FP-tree and header_table, with node_link to first node of that item
     """
     # tree main node
     tree = Node('Null set', 1, None)
@@ -69,7 +70,7 @@ def create_tree(dataset, header_table):
 
             update_tree(ordered_transaction, tree, header_table, count)
 
-    return tree
+    return tree, header_table
 
 
 def update_tree(ordered_transaction, parent_node, header_table, count):
@@ -79,17 +80,38 @@ def update_tree(ordered_transaction, parent_node, header_table, count):
     :param parent_node: parent node of first item of the ordered_transaction
                         if ordered_transaction is a full transaction the parent node will be the root node
                         if ordered_transaction is a subset, parent node is the previous node in the full transaction
-    :param header_table: dictionary containing the frequency of each item and pointers to nodes
+    :param header_table: dictionary containing the frequency of each item and node_link to first node of that item
     :param count: number of times this transaction occurs in our dataset
     """
     item = ordered_transaction[0] # create Node for first item in the ordered_transaction (most frequent item)
     if item in parent_node.children:
         parent_node.children[item].frequency += 1
     else:
-        parent_node.children[item] = Node(item=item,
-                                          frequency=count,
-                                          parent_node=parent_node)
+        new_node = Node(item=item,
+                        frequency=count,
+                        parent_node=parent_node)
+        parent_node.children[item] = new_node
 
+        update_node_link(header_table, new_node)
     # recursively created nodes for remaining items in the transaction
     if len(ordered_transaction) > 1:
         update_tree(ordered_transaction[1:],parent_node.children[item], header_table, count)
+
+def update_node_link(header_table, item_node):
+    """updates the node_link of the header_table or a Node with a reference to the new Node of a certain item
+
+    :param header_table: dictionary containing the frequency of each item and node_link to first node of that item
+    :param item_node: node of the item that has been placed in the fp-tree
+    """
+    item = item_node.item
+    # if it is the first Node created of that item populate node link in header_table
+    if header_table[item]['node_link'] is None:
+        header_table[item]['node_link'] = item_node
+
+    # else, populate last node of this item that
+    else:
+        node = header_table[item]['node_link']
+        while node.node_link is not None:
+            node = node.node_link
+
+        node.node_link = item_node

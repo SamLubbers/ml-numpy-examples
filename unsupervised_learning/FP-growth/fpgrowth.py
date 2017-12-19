@@ -67,4 +67,29 @@ def create_tree(dataset, header_table):
                                                                           key=operator.itemgetter(1),
                                                                           reverse=True)]
 
-    return tree, header_table
+            update_tree(ordered_transaction, tree, header_table, count)
+
+    return tree
+
+
+def update_tree(ordered_transaction, parent_node, header_table, count):
+    """recursively updates the FP-tree with each item in ordered_transaction
+
+    :param ordered_transaction: list of items in a transaction, or transaction subset, sorted by frequency of occurance
+    :param parent_node: parent node of first item of the ordered_transaction
+                        if ordered_transaction is a full transaction the parent node will be the root node
+                        if ordered_transaction is a subset, parent node is the previous node in the full transaction
+    :param header_table: dictionary containing the frequency of each item and pointers to nodes
+    :param count: number of times this transaction occurs in our dataset
+    """
+    item = ordered_transaction[0] # create Node for first item in the ordered_transaction (most frequent item)
+    if item in parent_node.children:
+        parent_node.children[item].frequency += 1
+    else:
+        parent_node.children[item] = Node(item=item,
+                                          frequency=count,
+                                          parent_node=parent_node)
+
+    # recursively created nodes for remaining items in the transaction
+    if len(ordered_transaction) > 1:
+        update_tree(ordered_transaction[1:],parent_node.children[item], header_table, count)

@@ -13,3 +13,11 @@ class Node(object):
         print(' '*indent+self.item+' '+str(self.frequency))
         for child in self.children.values():
             child.display_tree(indent=indent+1)
+
+def prepare_input_data(dataset):
+    """converts a list of transactions to the correct format to build an fp-tree"""
+    data = {}
+    for transaction in dataset:
+        data[frozenset(transaction)] = data.setdefault(frozenset(transaction), 0) + 1
+
+    return data

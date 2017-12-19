@@ -8,3 +8,14 @@ node.children['z'] = Node('z', 2, None)
 
 # print simple tree
 node.display_tree()
+
+# example dataset of transactions
+dataset = [['r', 'z', 'h', 'j', 'p'],
+           ['z', 'y', 'x', 'w', 'v', 'u', 't', 's'],
+           ['z'],
+           ['r', 'x', 'n', 'o', 's'],
+           ['y', 'r', 'x', 'z', 'q', 't', 'p'],
+           ['y', 'z', 'x', 'e', 'q', 's', 't', 'm']]
+
+from fpgrowth import prepare_input_data
+parsed_dataset = prepare_input_data(dataset)

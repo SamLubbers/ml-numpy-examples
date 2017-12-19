@@ -118,16 +118,44 @@ def update_node_link(header_table, item_node):
         node.node_link = item_node
 
 def fp_tree(dataset, min_support):
-    """creates a complete fp_tree given the raw dataset and minimum support
+    """creates a complete fp_tree given the parsed dataset and minimum support
 
     :param dataset: dictionary with frozensets of instances as keys and their frequency as values
     :param min_support: minimum number of times each item must appear to be kept in the header table
     :return: FP-tree and header table, with item count and node_link to first node of that item
     """
-    dataset = prepare_input_data(dataset)
     header_table = create_header_table(dataset, min_support)
 
     if not header_table: return None, None # header table must not be empty to proceed
 
     tree, header_table = create_tree(dataset, header_table)
     return tree, header_table
+
+def ascend_tree(node, prefix_path):
+    """recursively scan parent nodes of node and add them to prefix path"""
+    if node.parent is not None:
+        prefix_path.append(node.item)
+        ascend_tree(node.parent, prefix_path)
+
+def conditional_pattern_base(item, header_table):
+    """find the conditional pattern base for all nodes of item in the fp-tree
+
+    :param item: item of which we want to obtain the conditional pattern base
+    :param header_table: header_table associated with the fp-tree form which we are obtaining the prefix paths
+    :return: dictionary with conditional pattern bases of the item in node_link
+    """
+    cpb = {}
+    node = header_table[item]['node_link']
+    while node is not None:
+        prefix_path = []
+        ascend_tree(node, prefix_path) # construct prefix path for this node
+        prefix_path = prefix_path[1:] # eliminate first item as it corresponds to current node
+
+        # add prefix path to conditional pattern base for this item
+        if prefix_path:
+            cpb[frozenset(prefix_path)] = node.frequency
+
+        # find prefix path for next node of the same item
+        node = node.node_link
+
+    return cpb

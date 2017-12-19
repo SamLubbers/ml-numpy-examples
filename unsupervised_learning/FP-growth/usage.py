@@ -17,5 +17,10 @@ dataset = [['r', 'z', 'h', 'j', 'p'],
            ['y', 'r', 'x', 'z', 'q', 't', 'p'],
            ['y', 'z', 'x', 'e', 'q', 's', 't', 'm']]
 
+# parse input
 from fpgrowth import prepare_input_data
 parsed_dataset = prepare_input_data(dataset)
+
+# create headertable from dataset
+from fpgrowth import create_header_table
+headertable = create_header_table(parsed_dataset, 3)

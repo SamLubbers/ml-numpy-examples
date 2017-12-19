@@ -21,3 +21,19 @@ def prepare_input_data(dataset):
         data[frozenset(transaction)] = data.setdefault(frozenset(transaction), 0) + 1
 
     return data
+
+def create_header_table(dataset, min_support):
+    """creates the header table, necessary for the creation of the fp-tree"""
+    header_table = {}
+    for transaction in dataset:
+        for item in transaction:
+            header_table[item] = header_table.setdefault(item, 0) + dataset[transaction]
+
+    for item in list(header_table.keys()):
+        if header_table[item] < min_support:
+            del header_table[item]
+
+    for item in list(header_table.keys()):
+        header_table[item] = {'count': header_table[item], 'pointer': None}
+
+    return header_table

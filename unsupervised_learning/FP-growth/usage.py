@@ -35,3 +35,6 @@ fptree, header_table = fp_tree(parsed_dataset, min_support=3)
 
 from fpgrowth import conditional_pattern_base
 cpb_x = conditional_pattern_base('x', header_table)
+
+from fpgrowth import mine_tree
+frequent_itemsets = mine_tree(fptree, header_table, min_support=3)

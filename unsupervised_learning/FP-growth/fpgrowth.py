@@ -159,3 +159,30 @@ def conditional_pattern_base(item, header_table):
         node = node.node_link
 
     return cpb
+
+def mine_tree(fptree, header_table, min_support, prefix=set([])):
+    """mines an FP-tree to find frequent itemsets
+
+    :param prefix: base items used to create a new frequent itemset.
+                   Every time mine_tree is recursively called on a conditional fp-tree for variable 'x', this variable
+                   is added as the prefix of the new itemset on the next recursion
+
+    """
+    frequent_itemsets = []
+    # list of items in header table sorted from less frequent to most frequent
+    ordered_items = [item_count[0] for item_count in sorted(header_table.items(), key=lambda p: p[1]['count'])]
+
+    for item in ordered_items:
+        new_itemset = prefix.copy()
+        new_itemset.add(item)
+        frequent_itemsets.append(new_itemset)
+        cpb = conditional_pattern_base(item, header_table)
+        conditional_tree, header_table_item = fp_tree(cpb, min_support)
+
+        # recursively mine each new conditional_tree, stop when you run out of items in conditional tree
+        if header_table_item:
+            new_frequent_itemests = mine_tree(conditional_tree, header_table_item, min_support, prefix=new_itemset)
+            for itemset in new_frequent_itemests:
+                frequent_itemsets.append(itemset)
+
+    return frequent_itemsets

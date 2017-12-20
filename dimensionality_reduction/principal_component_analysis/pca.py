@@ -7,7 +7,7 @@ def pca(dataset, n_features=3):
     it will return a dataset with n_features number of features or as many as the original dataset has
     :type dataset: numpy.matrix (mxn)
     :param n_features: number of features of the new dataset
-    :return: dataset (with best extracted features)
+    :return: dataset with best extracted features, and reconstructed dataset using those features
     """
     mean = np.mean(dataset, axis=0)
     dataset_distance_mean = dataset - mean
@@ -17,4 +17,5 @@ def pca(dataset, n_features=3):
     eigenvalues_indexes = eigenvalues_indexes[: -(n_features + 1): -1] # sort and trim list of eigenvalues
     top_eigenvectors = eigenvectors[:, eigenvalues_indexes]
     new_dataset = dataset_distance_mean * top_eigenvectors
-    return new_dataset
+    reconstructed_dataset = (new_dataset * top_eigenvectors.T) + mean
+    return np.array(new_dataset), np.array(reconstructed_dataset)
